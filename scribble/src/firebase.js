@@ -1,11 +1,11 @@
 import firebase from 'firebase'
 var config = {
-    apiKey: "AIzaSyCVwb10VKUD-jKFcgayd_wN3pjBCLlkd9w",
-    authDomain: "scribble-e9588.firebaseapp.com",
-    databaseURL: "https://scribble-e9588.firebaseio.com",
-    projectId: "scribble-e9588",
-    storageBucket: "scribble-e9588.appspot.com",
-    messagingSenderId: "906391355898"
-  };
+  apiKey: "AIzaSyC2QAL2O2Q9xEakoXXDaM2NtfRyRa8OgRo",
+  authDomain: "scribble-sean.firebaseapp.com",
+  databaseURL: "https://scribble-sean.firebaseio.com",
+  projectId: "scribble-sean",
+  storageBucket: "scribble-sean.appspot.com",
+  messagingSenderId: "543071412494"
+};
 firebase.initializeApp(config);
 export default firebase;

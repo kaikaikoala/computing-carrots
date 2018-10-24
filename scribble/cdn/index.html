@@ -29,8 +29,7 @@ const {
   Typography,
   withStyles,
 } = window['material-ui'];
-
-const theme = createMuiTheme({
+ const theme = createMuiTheme({
   palette: {
     primary: {
       light: colors.purple[300],
@@ -47,8 +46,7 @@ const theme = createMuiTheme({
     useNextVariants: true,
   },
 });
-
-const styles = theme => ({
+ const styles = theme => ({
   root: {
     textAlign: 'center',
     paddingTop: theme.spacing.unit * 20,
@@ -57,29 +55,24 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
   },
 });
-
-class Index extends React.Component {
+ class Index extends React.Component {
   state = {
     open: false,
   };
-
-  handleClose = () => {
+   handleClose = () => {
     this.setState({
       open: false,
     });
   };
-
-  handleClick = () => {
+   handleClick = () => {
     this.setState({
       open: true,
     });
   };
-
-  render() {
+   render() {
     const { classes } = this.props;
     const { open } = this.state;
-
-    return (
+     return (
       <MuiThemeProvider theme={theme}>
         <div className={classes.root}>
           <CssBaseline />
@@ -109,10 +102,8 @@ class Index extends React.Component {
     );
   }
 }
-
-const App = withStyles(styles)(Index);
-
-ReactDOM.render(<App />, document.getElementById('root'));
+ const App = withStyles(styles)(Index);
+ ReactDOM.render(<App />, document.getElementById('root'));
     </script>
   </body>
 </html>
