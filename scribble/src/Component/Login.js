@@ -61,30 +61,48 @@ class Login extends React.Component {
     var email = this.state.email
     var password = this.state.password
 
-    console.log(email)
-    console.log(password)
-  
-    firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // ...
-    });
+    // Firebase auth is an async function that takes other functions to run when it completes
+    // catch() is run when there is an error and then() is run if it completes sucessfully
+    firebase.auth()
+            .signInWithEmailAndPassword(email, password)
+            .catch(function(error) {
+              console.log("invalid sign in!")
+              // Handle Errors here.
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              // ...
+            })
+            .then(function(values) {
+              // route to some page where we show the user their stuff
+            });
   };
   
   firebaseRegister () {
     var email = this.state.email
     var password = this.state.password
 
-    console.log(email)
-    console.log(password)
-  
-    firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // ...
-    });
+    // Firebase auth is an async function that takes other functions to run when it completes
+    // catch() is run when there is an error and then() is run if it completes sucessfully
+    // TODO: handle when the user is already registered, do something unique with authenticated user
+    firebase.auth()
+                  .createUserWithEmailAndPassword(email, password)
+                  .catch(function(error) {
+                    // Handle Errors here.
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    // ...
+                  })
+                  .then(function(values) {
+                    var user = values.user;
+                    var userID = user.uid;
+                    var formattedEmail = user.email.replace('@','-').replace('.','-');
+
+                    // add new user to the database that stores email:UID key:values
+                    var database = firebase.database().ref('userEmailTable/');
+                    database.child(formattedEmail).set(userID);
+
+                    // route them to their home page
+                  });
   };
 
   render() {
@@ -122,7 +140,7 @@ class Login extends React.Component {
                 />
               </FormControl>
               <Button
-                type="submit"
+                type="button"
                 fullWidth
                 variant="contained"
                 color="primary"
@@ -132,7 +150,7 @@ class Login extends React.Component {
                 Register
               </Button>
               <Button
-                type="submit"
+                type="button"
                 fullWidth
                 variant="contained"
                 color="primary"
