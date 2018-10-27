@@ -14,8 +14,7 @@ class Contacts extends Component{
       <ButtonAppBar></ButtonAppBar>
       <ScribbleHeader></ScribbleHeader>
       <h1>Contacts</h1>
-      <ContactCard contacts={this.props.contactsList[0]}/>
-      <h3>{this.props.contactsList[0].group}</h3>
+      <ContactCard addClick={()=>this.props.addClick()} contacts={this.props.contactsList[0]}/>
       </div>
     );
   }

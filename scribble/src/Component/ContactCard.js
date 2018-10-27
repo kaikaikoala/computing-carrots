@@ -35,12 +35,11 @@ function ContactCard(props) {
           {props.contacts.group}
         </Typography>
         <Typography className={classes.pos} color="textSecondary">
+          Group size: {props.contacts.contacts.length}
         </Typography>
-        <Typography component="p">
-          well meaning and kindly.
-          <br />
-          {'"a benevolent smile"'}
-        </Typography>
+        <button onClick={props.addClick}>
+          Add Members
+        </button>
       </CardContent>
       <CardActions>
         <Button size="small">Learn More</Button>
