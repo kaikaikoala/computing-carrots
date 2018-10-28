@@ -71,9 +71,11 @@ class Login extends React.Component {
               var errorCode = error.code;
               var errorMessage = error.message;
               // ...
+              return false
             })
             .then(function(values) {
               // route to some page where we show the user their stuff
+              return true; // returning true doesn't really work for some reason
             });
   };
   
@@ -91,17 +93,43 @@ class Login extends React.Component {
                     var errorCode = error.code;
                     var errorMessage = error.message;
                     // ...
+                    return false;
                   })
                   .then(function(values) {
+                    if (values == false) {
+                      console.log("problem!!!")
+                      return false
+                    }
+
                     var user = values.user;
+                    console.log(user);
                     var userID = user.uid;
                     var formattedEmail = user.email.replace('@','-').replace('.','-');
+                    console.log(formattedEmail);
+                    console.log(userID);
+
+                    var path = 'userEmailTable/' + formattedEmail;
+                    console.log(path);
 
                     // add new user to the database that stores email:UID key:values
-                    var database = firebase.database().ref('userEmailTable/');
-                    database.child(formattedEmail).set(userID);
+                    var emailUsernameRef = firebase.database().ref(path);
+                    emailUsernameRef.transaction(function(currentData) {
+                      if (currentData === null) {
+                        return {formattedEmail: formattedEmail, userID: userID};
+                      } else {
+                        console.log('User already exists.');
+                        return; // Abort the transaction.
+                      }
+                    }, function(error, committed) {
+                      if (error) {
+                        console.log('Transaction failed abnormally!', error);
+                      } else if (!committed) {
+                        console.log('We aborted the transaction (because it already exists).');
+                      }
+                    });
 
                     // route them to their home page
+                    return true;
                   });
   };
 
@@ -145,7 +173,10 @@ class Login extends React.Component {
                 variant="contained"
                 color="primary"
                 className={classes.register}
-                onClick={() => { this.firebaseRegister() }}
+                onClick={() => {
+                  this.firebaseRegister()
+                  // ideally here we would go to a home page if the registration was successful
+                }}
               >
                 Register
               </Button>
@@ -155,7 +186,17 @@ class Login extends React.Component {
                 variant="contained"
                 color="primary"
                 className={classes.signIn}
-                onClick={() => { this.firebaseSignIn() }}
+                onClick={() => {
+                  this.firebaseSignIn();
+
+                  // ideally here we would go to a home page if the sign in was successful
+
+                  // var databaseRef = firebase.database().ref('events/someUniqueEventID');
+                  // databaseRef.on('value', function(snapshot) {
+                  //   var value = snapshot.val();
+                  //   console.log(value);
+                  // });
+                }}
               >
                 Sign in
               </Button>

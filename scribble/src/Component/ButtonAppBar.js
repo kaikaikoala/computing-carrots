@@ -44,9 +44,36 @@ function ButtonAppBar(props) {
            Scribble 
           </Link>
           </Typography>
-          <Button color="inherit"><Link to="/Contacts">Contacts</Link></Button>
-          <Button color="inherit"><Link to="/Calendar">Calendar</Link></Button>
-          <Button color="inherit"><Link to="/Add">Add</Link></Button>
+          <Button
+                type="button"
+                variant="text"
+                color="inherit"
+                className={classes.signIn}
+                onClick={() => {}}
+          >
+            <Link to="/Contacts"></Link>
+                Contacts
+          </Button>
+          <Button
+                type="button"
+                variant="text"
+                color="inherit"
+                className={classes.signIn}
+                onClick={() => {}}
+          >
+            <Link to="/Calendar"></Link>
+                Calendar
+          </Button>
+          <Button
+                type="button"
+                variant="text"
+                color="inherit"
+                className={classes.signIn}
+                onClick={() => {}}
+          >
+            <Link to="/Add"></Link>
+                Add
+          </Button>
         </Toolbar>
       </AppBar>
     </div>
