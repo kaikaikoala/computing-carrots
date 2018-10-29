@@ -7,10 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 
-import Contacts from '../Contacts';
-import Calendar from '../Calendar';
-import Add from '../Add';
-
 
 import{
   BrowserRouter as Router,
@@ -32,6 +28,10 @@ const styles = {
     marginRight: 20,
   },
 };
+const CalendarLink= props =><Link to="/Calendar" {...props}/>
+const AddLink= props =><Link to="/Add" {...props}/>
+const ContactsLink= props =><Link to="/Contacts" {...props}/>
+const HomeLink= props =><Link to="/" {...props}/>
 
 function ButtonAppBar(props) {
   const { classes } = props;
@@ -40,38 +40,45 @@ function ButtonAppBar(props) {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" color="inherit" className={classes.grow}>
-          <Link to="/">
-           Scribble 
-          </Link>
-          </Typography>
           <Button
+                component={HomeLink}
                 type="button"
                 variant="text"
                 color="inherit"
                 className={classes.signIn}
                 onClick={() => {}}
           >
-            <Link to="/Contacts"></Link>
+            Scribble
+          </Button>
+          </Typography>
+          <Button
+                component={ContactsLink}
+                type="button"
+                variant="text"
+                color="inherit"
+                className={classes.signIn}
+                onClick={() => {}}
+          >
                 Contacts
           </Button>
           <Button
+                component={CalendarLink}
                 type="button"
                 variant="text"
                 color="inherit"
                 className={classes.signIn}
                 onClick={() => {}}
           >
-            <Link to="/Calendar"></Link>
                 Calendar
           </Button>
           <Button
+                component={AddLink}
                 type="button"
                 variant="text"
                 color="inherit"
                 className={classes.signIn}
                 onClick={() => {}}
           >
-            <Link to="/Add"></Link>
                 Add
           </Button>
         </Toolbar>
