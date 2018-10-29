@@ -26,14 +26,6 @@ function createData(date, place, time, avalible) {
   return { id, date, place, time, avalible };
 }
 
-const rows = [
-  createData("12/15/2018", "iHop", "13:30", "Yes"),
-  createData("12/16/2018", "iHop", "14:30", "No"),
-  createData("12/17/2018", "iHop", "15:30", "Yes"),
-  createData("12/17/2018", "iHop", "16:30", "No"),
-  createData("12/18/2018", "iHop", "17:30", "Yes"),
-];
-
 function CalendarTable(props) {
   const { classes } = props;
 
@@ -42,7 +34,18 @@ function CalendarTable(props) {
   // also we only use the name and description right now because TableCells...
   var userData = props.userData;
 
-  console.log(userData);
+  console.log(userData.options);
+
+  // take our data and make it avalible to the TableCells
+  let rows = []
+  for (var i in userData.options) {
+    rows.push(createData(
+                          userData.options[i].date,
+                          userData.options[i].location,
+                          userData.options[i].time,
+                          userData.options[i].avalible
+                        ));
+  } 
 
   return (
     <Paper className={classes.root}>
@@ -56,18 +59,15 @@ function CalendarTable(props) {
         <TableHead>
           <TableRow>
             <TableCell>Dates</TableCell>
-            <TableCell numeric>Times</TableCell>
-            <TableCell numeric>Fat (g)</TableCell>
-            <TableCell numeric>avalible?</TableCell>
+            <TableCell>Location</TableCell>
+            <TableCell>Time</TableCell>
+            <TableCell>Avalible?</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map(row => {
             return (
               <TableRow key={row.id}>
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
                 <TableCell string>{row.date}</TableCell>
                 <TableCell string>{row.place}</TableCell>
                 <TableCell string>{row.time}</TableCell>
