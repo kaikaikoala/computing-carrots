@@ -2,6 +2,7 @@
   "name": "scribble",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3000/",
   "dependencies": {
     "@material-ui/core": "^3.3.0",
     "@material-ui/icons": "^3.0.1",

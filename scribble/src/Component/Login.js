@@ -74,8 +74,12 @@ class Login extends React.Component {
               return false
             })
             .then(function(values) {
+              if (values == false) {
+                window.location = '404.html'
+                return false
+              }
               // route to some page where we show the user their stuff
-              return true; // returning true doesn't really work for some reason
+              window.location = 'Calendar'
             });
   };
   
@@ -93,6 +97,7 @@ class Login extends React.Component {
                     var errorCode = error.code;
                     var errorMessage = error.message;
                     // ...
+                    window.location = '404.html'
                     return false;
                   })
                   .then(function(values) {
@@ -129,7 +134,7 @@ class Login extends React.Component {
                     });
 
                     // route them to their home page
-                    return true;
+                    window.location = 'Calendar'
                   });
   };
 
@@ -175,7 +180,6 @@ class Login extends React.Component {
                 className={classes.register}
                 onClick={() => {
                   this.firebaseRegister()
-                  // ideally here we would go to a home page if the registration was successful
                 }}
               >
                 Register
@@ -187,15 +191,7 @@ class Login extends React.Component {
                 color="primary"
                 className={classes.signIn}
                 onClick={() => {
-                  this.firebaseSignIn();
-
-                  // ideally here we would go to a home page if the sign in was successful
-
-                  // var databaseRef = firebase.database().ref('events/someUniqueEventID');
-                  // databaseRef.on('value', function(snapshot) {
-                  //   var value = snapshot.val();
-                  //   console.log(value);
-                  // });
+                  this.firebaseSignIn()
                 }}
               >
                 Sign in
