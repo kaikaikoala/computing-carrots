@@ -9,6 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import firebase from '../firebase.js';
+import * as firebaseInterface from '../firebaseInterface.js';
 
 const styles = theme => ({
   layout: {
@@ -82,61 +83,6 @@ class Login extends React.Component {
               window.location = 'Calendar'
             });
   };
-  
-  firebaseRegister () {
-    var email = this.state.email
-    var password = this.state.password
-
-    // Firebase auth is an async function that takes other functions to run when it completes
-    // catch() is run when there is an error and then() is run if it completes sucessfully
-    // TODO: handle when the user is already registered, do something unique with authenticated user
-    firebase.auth()
-                  .createUserWithEmailAndPassword(email, password)
-                  .catch(function(error) {
-                    // Handle Errors here.
-                    var errorCode = error.code;
-                    var errorMessage = error.message;
-                    // ...
-                    window.location = '404.html'
-                    return false;
-                  })
-                  .then(function(values) {
-                    if (values == false) {
-                      console.log("problem!!!")
-                      return false
-                    }
-
-                    var user = values.user;
-                    console.log(user);
-                    var userID = user.uid;
-                    var formattedEmail = user.email.replace('@','-').replace('.','-');
-                    console.log(formattedEmail);
-                    console.log(userID);
-
-                    var path = 'userEmailTable/' + formattedEmail;
-                    console.log(path);
-
-                    // add new user to the database that stores email:UID key:values
-                    var emailUsernameRef = firebase.database().ref(path);
-                    emailUsernameRef.transaction(function(currentData) {
-                      if (currentData === null) {
-                        return {formattedEmail: formattedEmail, userID: userID};
-                      } else {
-                        console.log('User already exists.');
-                        return; // Abort the transaction.
-                      }
-                    }, function(error, committed) {
-                      if (error) {
-                        console.log('Transaction failed abnormally!', error);
-                      } else if (!committed) {
-                        console.log('We aborted the transaction (because it already exists).');
-                      }
-                    });
-
-                    // route them to their home page
-                    window.location = 'Calendar'
-                  });
-  };
 
   render() {
     const { classes } = this.props;
@@ -179,7 +125,10 @@ class Login extends React.Component {
                 color="primary"
                 className={classes.register}
                 onClick={() => {
-                  this.firebaseRegister()
+                  if (firebaseInterface.firebaseRegister(this.state.email, this.state.password) == true) {
+                    // route them to their home page
+                    window.location = 'Calendar'
+                  }
                 }}
               >
                 Register
@@ -191,7 +140,8 @@ class Login extends React.Component {
                 color="primary"
                 className={classes.signIn}
                 onClick={() => {
-                  this.firebaseSignIn()
+                  // we route to the Calendar within firebaseRegister
+                  firebaseInterface.firebaseRegister(this.state.email, this.state.password)
                 }}
               >
                 Sign in

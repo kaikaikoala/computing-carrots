@@ -3,20 +3,7 @@ import ButtonAppBar from './Component/ButtonAppBar';
 import ScribbleHeader from './Component/ScribbleHeader';
 import CalendarTable from './Component/CalendarTable';
 import firebase from './firebase.js';
-
-function getCalendar() {
-  var databaseRef = firebase.database().ref('events/someUniqueEventID');
-
-  return new Promise(function (resolve, reject) {
-    databaseRef.on('value', function(snapshot) {
-        if (snapshot != null) {
-          resolve(snapshot.val())
-        } else {
-          reject('Something bad happened');
-        }
-      });
-  });
-}
+import * as firebaseInterface from './firebaseInterface.js';
 
 class Calendar extends Component{
   state = {
@@ -24,8 +11,11 @@ class Calendar extends Component{
   }
 
   componentDidMount() {
-    getCalendar().then((data) => {
+    firebaseInterface.firebaseGetCalendar().then((data) => {
       this.setState({ userData: data });
+      firebaseInterface.addEvent();
+      //firebaseInterface.addTime('gr3YTBQA3NAUnjWnHJwT', 'December 17, 1995 03:24:00')
+      //firebaseInterface.inviteUsers('gr3YTBQA3NAUnjWnHJwT', ["example1@example.com", "example2@example.com", "example3@example.com"]);
     }, (error) => {
       console.log("woops")
     });
