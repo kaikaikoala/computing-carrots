@@ -58,32 +58,6 @@ class Login extends React.Component {
     });
   };
 
-  firebaseSignIn() {
-    var email = this.state.email
-    var password = this.state.password
-
-    // Firebase auth is an async function that takes other functions to run when it completes
-    // catch() is run when there is an error and then() is run if it completes sucessfully
-    firebase.auth()
-            .signInWithEmailAndPassword(email, password)
-            .catch(function(error) {
-              console.log("invalid sign in!")
-              // Handle Errors here.
-              var errorCode = error.code;
-              var errorMessage = error.message;
-              // ...
-              return false
-            })
-            .then(function(values) {
-              if (values == false) {
-                window.location = '404.html'
-                return false
-              }
-              // route to some page where we show the user their stuff
-              window.location = 'Calendar'
-            });
-  };
-
   render() {
     const { classes } = this.props;
 
@@ -141,7 +115,7 @@ class Login extends React.Component {
                 className={classes.signIn}
                 onClick={() => {
                   // we route to the Calendar within firebaseRegister
-                  firebaseInterface.firebaseRegister(this.state.email, this.state.password)
+                  firebaseInterface.firebaseSignIn(this.state.email, this.state.password)
                 }}
               >
                 Sign in

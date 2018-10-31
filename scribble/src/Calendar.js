@@ -13,9 +13,13 @@ class Calendar extends Component{
   componentDidMount() {
     firebaseInterface.firebaseGetCalendar().then((data) => {
       this.setState({ userData: data });
-      firebaseInterface.addEvent();
-      //firebaseInterface.addTime('gr3YTBQA3NAUnjWnHJwT', 'December 17, 1995 03:24:00')
-      //firebaseInterface.inviteUsers('gr3YTBQA3NAUnjWnHJwT', ["example1@example.com", "example2@example.com", "example3@example.com"]);
+      // we call addEvent which returns a promise
+      // if the event is added successfully, we get the document ID
+      firebaseInterface.addEvent().then((docID) => {
+        // now that we have the document ID of the event, we can add any times and invites we want.
+        firebaseInterface.addTime(docID, 'December 17, 1995 03:24:00')
+        firebaseInterface.inviteUsers(docID, ["example1@example.com", "example2@example.com", "example3@example.com"]);
+      });
     }, (error) => {
       console.log("woops")
     });

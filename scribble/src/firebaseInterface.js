@@ -35,6 +35,29 @@ export function firebaseGetCalendar() {
         });
     });
 }
+
+export function firebaseSignIn(email, password) {
+    // Firebase auth is an async function that takes other functions to run when it completes
+    // catch() is run when there is an error and then() is run if it completes sucessfully
+    firebase.auth()
+            .signInWithEmailAndPassword(email, password)
+            .catch(function(error) {
+              console.log("invalid sign in!")
+              // Handle Errors here.
+              var errorCode = error.code;
+              var errorMessage = error.message;
+              // ...
+              return false
+            })
+            .then(function(values) {
+              if (values == false) {
+                window.location = '404.html'
+                return false
+              }
+              // route to some page where we show the user their stuff
+              window.location = 'Calendar'
+            });
+  };
   
 export function firebaseRegister(email, password) {
 firebase.auth()
@@ -171,34 +194,38 @@ export function inviteUsers(eventID, userEmails) {
 }
 
 // creates event and returns the id of the event
+// this should really return a future so we can handle 
 export function addEvent() {
     const user = firebase.auth().currentUser;
+    console.log("running addevent");
 
-    if (user) {
-        const userID = user.uid;
+    return new Promise(function (resolve, reject) {
+        if (user) {
+            const userID = user.uid;
+        
+            db.collection("events").add({
+                creator: userID,
+                invited: [userID],
+                dates: [],
+            })
+            .then(function(docRef) {
+                console.log("Document written with ID: ", docRef.id);
     
-        db.collection("events").add({
-            creator: userID,
-            invited: [userID],
-            dates: [],
-        })
-        .then(function(docRef) {
-            console.log("Document written with ID: ", docRef.id);
+                // get the dates data
+                const userRef = db.collection("users").doc(userID);
+                userRef.update({
+                    createdEvents: firebase.firestore.FieldValue.arrayUnion(docRef.id)
+                });
 
-            // get the dates data
-            const userRef = db.collection("users").doc(userID);
-            userRef.update({
-                createdEvents: firebase.firestore.FieldValue.arrayUnion(docRef.id)
+                resolve(docRef.id);
+            })
+            .catch(function(error) {
+                console.error("Error adding document: ", error);
+                reject(null);
             });
-
-            return docRef.id; // not sure if this will actually return
-        })
-        .catch(function(error) {
-            console.error("Error adding document: ", error);
-            return null;
-        });
-    } else {
-        console.log("no user signed in");
-        return null;
-    }
+        } else {
+            console.log("no user signed in");
+            reject(null);
+        }
+    });
 }
