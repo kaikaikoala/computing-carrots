@@ -108,89 +108,172 @@ firebase.auth()
                 });
 }
 
+// addTime and inviteUsers need to return futures....
+
 // PLEASE DONT PASS IN THE SAME DATE AND TIME TWICE :^)
 // Takes an eventID string and a proper timestamp string
 export function addTime(eventID, dateTime) {
-const eventRef = db.collection("events").doc(eventID);
-const getOptions = { source: 'server' };
+    console.log("running add time")
+    const eventRef = db.collection("events").doc(eventID);
+    const getOptions = { source: 'server' };
 
-// get our current event from the database
-eventRef.get(getOptions).then(function(event) {
-    let avalibilityArray = [];
-    event.data().invited.forEach(uid => {
-        avalibilityArray.push({ [uid] : false});
+    // get our current event from the database
+    eventRef.get(getOptions).then(function(event) {
+        let avalibilityArray = [];
+        event.data().invited.forEach(uid => {
+            avalibilityArray.push({ [uid] : false});
+        });
+
+        const eventObject = {
+            date : new Date(dateTime),
+            avalibility : avalibilityArray,
+        }
+
+        // add our eventObject to our dates array
+        db.collection("events").doc(eventID).set({
+            dates: firebase.firestore.FieldValue.arrayUnion(eventObject),
+        }, { merge: true })
+        .then(function() {
+            console.log("finished")
+        })
+        .catch(function(error) {
+            console.error("Error adding document: ", error);
+        });
+    }).catch(function(error) {
+        console.log("Error getting cached document:", error);
     });
-
-    const eventObject = {
-        date : new Date(dateTime),
-        avalibility : avalibilityArray,
-    }
-
-    // add our eventObject to our dates array
-    db.collection("events").doc(eventID).set({
-        dates: firebase.firestore.FieldValue.arrayUnion(eventObject),
-    }, { merge: true })
-    .then(function() {
-        console.log("finished")
-    })
-    .catch(function(error) {
-        console.error("Error adding document: ", error);
-    });
-}).catch(function(error) {
-    console.log("Error getting cached document:", error);
-});
 }
 
 // Takes an eventID string and an array of emails
 export function inviteUsers(eventID, userEmails) {
-// for each user email
-// look up their id
-// add event id to their list of invitedEvents
+    // for each user email
+    // look up their id
+    // add event id to their list of invitedEvents
 
-// for the single event
-// add each person to the invited list
-// add each people to each existing date
+    // for the single event
+    // add each person to the invited list
+    // add each people to each existing date
 
-    userEmails.forEach(email => {
-        // make requests for emailUIDMap
-        const emailUIDMapRef = db.collection("emailUIDMap").doc(email);
+    return new Promise(function (resolve, reject) {
+
         const getOptions = { source: 'server' };
 
-        // get our userID from the database
-        emailUIDMapRef.get(getOptions).then(function(user) {
-            const uid = user.data().uid;
+        const userPromiseArray = []
 
-            //add the event id to each user's invitedEvents list
-            const userRef = db.collection("users").doc(uid);
-            userRef.update({
-                invitedEvents: firebase.firestore.FieldValue.arrayUnion(eventID)
+        userEmails.forEach(function(email) {
+            const emailUIDMapRef = db.collection("emailUIDMap").doc(email);
+            userPromiseArray.push(emailUIDMapRef.get(getOptions));
+        });
+
+        const eventRef = db.collection("events").doc(eventID);
+        let uidArray = [];
+        
+        // get all of our users from the database
+        Promise.all(userPromiseArray).then(function(users) {
+            let userUpdatePromiseArray = [];
+
+            // put all their UIDs in an array
+            users.forEach(function(user) {
+                uidArray.push(user.data().uid);
             });
 
-            // add the userID to the event invited list
+            // for each user, create a promise to update the database
+            uidArray.forEach(function (uid) {
+                //add the event id to each user's invitedEvents list
+                const userRef = db.collection("users").doc(uid);
+
+                userUpdatePromiseArray.push(
+                    userRef.update({
+                        invitedEvents: firebase.firestore.FieldValue.arrayUnion(eventID)
+                    })
+                );
+            });
+
+            // run all these promises and return the result in an array
+            return Promise.all(userUpdatePromiseArray);
+        }).then(function() {
+            let eventUpdatePromiseArray = [];
+
             const eventRef = db.collection("events").doc(eventID);
-            eventRef.update({
-                invited: firebase.firestore.FieldValue.arrayUnion(uid)
+
+            // for each user, add them to the list of invites on the event
+            uidArray.forEach(function(uid) {
+                eventUpdatePromiseArray.push(
+                    eventRef.update({
+                        invited: firebase.firestore.FieldValue.arrayUnion(uid)
+                    })
+                );
             });
+
+            return Promise.all(eventUpdatePromiseArray);
+        }).then(function() {
 
             // get the dates data
-            const eventsRef = db.collection("emailUIDMap").doc(eventID);
-            eventsRef.get(getOptions).then(function(events) {
-                let eventsDatesData = events.data().dates;
+            return eventRef.get(getOptions);
+        }).then(function(events) {
+            let eventsDatesData = events.data().dates;
 
-                eventsDatesData.forEach(element => {
+            eventsDatesData.forEach(element => {
+                uidArray.forEach(uid => {
                     element.avalibility.push({[uid] : false})
-                });
-                
-                eventRef.update({
-                    dates: firebase.firestore.FieldValue.arrayUnion(eventsDatesData)
-                });
+                })
             });
 
-
-        }).catch(function(error) {
+            console.log("eventsDatesData is :" ,eventsDatesData);
+            
+            return eventRef.update({
+                dates: eventsDatesData
+            });
+        }).then(function() {
+            resolve();
+        })
+        .catch(function(error) {
             console.log("Error getting cached document:", error);
+            reject();
         });
+
     });
+
+    // userEmails.forEach(email => {
+    //     // make requests for emailUIDMap
+    //     const emailUIDMapRef = db.collection("emailUIDMap").doc(email);
+    //     const getOptions = { source: 'server' };
+
+    //     // get our userID from the database
+    //     emailUIDMapRef.get(getOptions).then(function(user) {
+    //         const uid = user.data().uid;
+
+    //         //add the event id to each user's invitedEvents list
+    //         const userRef = db.collection("users").doc(uid);
+    //         userRef.update({
+    //             invitedEvents: firebase.firestore.FieldValue.arrayUnion(eventID)
+    //         });
+
+    //         // add the userID to the event invited list
+    //         const eventRef = db.collection("events").doc(eventID);
+    //         eventRef.update({
+    //             invited: firebase.firestore.FieldValue.arrayUnion(uid)
+    //         });
+
+    //         // get the dates data
+    //         const eventsRef = db.collection("emailUIDMap").doc(eventID);
+    //         eventsRef.get(getOptions).then(function(events) {
+    //             let eventsDatesData = events.data().dates;
+
+    //             eventsDatesData.forEach(element => {
+    //                 element.avalibility.push({[uid] : false})
+    //             });
+                
+    //             eventRef.update({
+    //                 dates: firebase.firestore.FieldValue.arrayUnion(eventsDatesData)
+    //             });
+    //         });
+
+
+    //     }).catch(function(error) {
+    //         console.log("Error getting cached document:", error);
+    //     });
+    // });
 }
 
 // creates event and returns the id of the event
