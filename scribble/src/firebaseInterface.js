@@ -9,18 +9,48 @@ db.settings({
 });
 
 // export function firebaseGetCalendar() {
-//     var databaseRef = firebase.database().ref('events/someUniqueEventID');
-  
+//     var user = firebase.auth().currentUser;
+
 //     return new Promise(function (resolve, reject) {
-//       databaseRef.on('value', function(snapshot) {
-//           if (snapshot != null) {
-//             resolve(snapshot.val())
-//           } else {
-//             reject('Something bad happened');
-//           }
-//         });
+
+//         if (user) {
+//             const uid = user.uid;
+//             const userPath = 'users/' + uid;
+
+//             const userRef = firebase.database().ref(userPath);
+//             const getOptions = { source: 'server' };
+
+//             userRef.get(getOptions).then(function(user) {
+//                 const userData = user.data();
+//                 let events = [];
+
+//                 // put every created event in events
+//                 userData.createdEvents.forEach(event => {
+//                     events.push(event);
+//                 });
+
+//                 // put every invited event in events
+//                 userData.invitedEvents.forEach(event => {
+//                     events.push(event);
+//                 });
+
+//                 let eventRequests = [];
+
+//                 events.forEach(eventID => {
+//                     eventRequests.push(db.collection("events").doc(eventID));
+//                 });
+
+//                 return Promise.all(eventRequests);
+//             }).then(function(events) {
+//                 // now we have all the data for each event
+//                 resolve(events);
+//             });
+//         } else {
+//             reject('no user');
+//         }
+
 //     });
-//   }
+// }
 
 export function firebaseGetCalendar() {
     var databaseRef = firebase.database().ref('events/someUniqueEventID');
@@ -41,21 +71,28 @@ export function firebaseSignIn(email, password) {
     // catch() is run when there is an error and then() is run if it completes sucessfully
     firebase.auth()
             .signInWithEmailAndPassword(email, password)
-            .catch(function(error) {
-              console.log("invalid sign in!")
-              // Handle Errors here.
-              var errorCode = error.code;
-              var errorMessage = error.message;
-              // ...
-              return false
-            })
             .then(function(values) {
               if (values == false) {
                 window.location = '404.html'
                 return false
               }
               // route to some page where we show the user their stuff
-              window.location = 'Calendar'
+              firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                  // User is signed in.
+                  window.location = 'Calendar'
+                } else {
+                  // No user is signed in.
+                  console.log("something bad happened");
+                }
+              });
+            }).catch(function(error) {
+                console.log("invalid sign in!")
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // ...
+                return false
             });
   };
   
@@ -113,34 +150,35 @@ firebase.auth()
 // PLEASE DONT PASS IN THE SAME DATE AND TIME TWICE :^)
 // Takes an eventID string and a proper timestamp string
 export function addTime(eventID, dateTime) {
-    console.log("running add time")
-    const eventRef = db.collection("events").doc(eventID);
-    const getOptions = { source: 'server' };
 
-    // get our current event from the database
-    eventRef.get(getOptions).then(function(event) {
-        let avalibilityArray = [];
-        event.data().invited.forEach(uid => {
-            avalibilityArray.push({ [uid] : false});
-        });
+    return new Promise(function (resolve, reject) {
+        console.log("running add time")
+        const eventRef = db.collection("events").doc(eventID);
+        const getOptions = { source: 'server' };
 
-        const eventObject = {
-            date : new Date(dateTime),
-            avalibility : avalibilityArray,
-        }
+        // get our current event from the database
+        eventRef.get(getOptions).then(function(event) {
+            let avalibilityArray = [];
+            event.data().invited.forEach(uid => {
+                avalibilityArray.push({ [uid] : false});
+            });
 
-        // add our eventObject to our dates array
-        db.collection("events").doc(eventID).set({
-            dates: firebase.firestore.FieldValue.arrayUnion(eventObject),
-        }, { merge: true })
-        .then(function() {
-            console.log("finished")
+            const eventObject = {
+                date : new Date(dateTime),
+                avalibility : avalibilityArray,
+            }
+
+            // add our eventObject to our dates array
+            return db.collection("events").doc(eventID).set({
+                dates: firebase.firestore.FieldValue.arrayUnion(eventObject),
+            }, { merge: true })
+        }).then(function() {
+            resolve();
         })
         .catch(function(error) {
-            console.error("Error adding document: ", error);
+            console.log("Error getting cached document:", error);
+            reject();
         });
-    }).catch(function(error) {
-        console.log("Error getting cached document:", error);
     });
 }
 
@@ -233,53 +271,12 @@ export function inviteUsers(eventID, userEmails) {
         });
 
     });
-
-    // userEmails.forEach(email => {
-    //     // make requests for emailUIDMap
-    //     const emailUIDMapRef = db.collection("emailUIDMap").doc(email);
-    //     const getOptions = { source: 'server' };
-
-    //     // get our userID from the database
-    //     emailUIDMapRef.get(getOptions).then(function(user) {
-    //         const uid = user.data().uid;
-
-    //         //add the event id to each user's invitedEvents list
-    //         const userRef = db.collection("users").doc(uid);
-    //         userRef.update({
-    //             invitedEvents: firebase.firestore.FieldValue.arrayUnion(eventID)
-    //         });
-
-    //         // add the userID to the event invited list
-    //         const eventRef = db.collection("events").doc(eventID);
-    //         eventRef.update({
-    //             invited: firebase.firestore.FieldValue.arrayUnion(uid)
-    //         });
-
-    //         // get the dates data
-    //         const eventsRef = db.collection("emailUIDMap").doc(eventID);
-    //         eventsRef.get(getOptions).then(function(events) {
-    //             let eventsDatesData = events.data().dates;
-
-    //             eventsDatesData.forEach(element => {
-    //                 element.avalibility.push({[uid] : false})
-    //             });
-                
-    //             eventRef.update({
-    //                 dates: firebase.firestore.FieldValue.arrayUnion(eventsDatesData)
-    //             });
-    //         });
-
-
-    //     }).catch(function(error) {
-    //         console.log("Error getting cached document:", error);
-    //     });
-    // });
 }
 
 // creates event and returns the id of the event
 // this should really return a future so we can handle 
 export function addEvent() {
-    const user = firebase.auth().currentUser;
+    var user = firebase.auth().currentUser;
     console.log("running addevent");
 
     return new Promise(function (resolve, reject) {

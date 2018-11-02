@@ -11,4 +11,8 @@ var config = {
 
 firebase.initializeApp(config);
 
+// firebase.auth().onAuthStateChanged(function(user) {
+//   if (user) {window.location = 'Calendar'}
+// });
+
 export default firebase;

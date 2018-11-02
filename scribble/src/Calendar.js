@@ -16,9 +16,12 @@ class Calendar extends Component{
     const component = this;
     let sharedDocID;
 
+    console.log("this is the thing: ", firebase.auth().currentUser);
+
     // get our calender data
     firebaseInterface.firebaseGetCalendar().then(function(data) {
 
+      // console.log(events);
       component.setState({ userData: data });
 
       return firebaseInterface.addEvent();
