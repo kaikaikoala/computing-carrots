@@ -26,23 +26,27 @@ class Calendar extends Component{
 
       return firebaseInterface.addEvent();
 
-    }).then(function(docID) {
+    })
+    
+    // .then(function(docID) {
 
-      sharedDocID = docID;
+    //   sharedDocID = docID;
 
-      const emailArray = ["example1@example.com", "example2@example.com", "example3@example.com"];
+    //   const emailArray = ["example1@example.com", "example2@example.com", "example3@example.com"];
 
-      return firebaseInterface.inviteUsers(sharedDocID, emailArray);
+    //   return firebaseInterface.inviteUsers(sharedDocID, emailArray);
 
-    }).then(function(){
+    // }).then(function(){
 
-      return firebaseInterface.addTime(sharedDocID, 'December 17, 1995 03:24:00');
+    //   return firebaseInterface.addTime(sharedDocID, 'December 17, 1995 03:24:00');
 
-    }).then(function(){
+    // }).then(function(){
 
-      console.log("database update complete");
+    //   console.log("database update complete");
 
-    }).catch(function(error) {
+    // })
+    
+    .catch(function(error) {
 
       console.error("Error: ", error);
 
