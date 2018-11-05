@@ -4,11 +4,41 @@ import ScribbleHeader from './Component/ScribbleHeader';
 import CalendarTable from './Component/CalendarTable';
 import firebase from './firebase.js';
 import * as firebaseInterface from './firebaseInterface.js';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+
+function TabContainer(props) {
+  return (
+    <Typography component="div" style={{ padding: 8 * 3 }}>
+      {props.children}
+    </Typography>
+  );
+}
+
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+  },
+});
 
 class Calendar extends Component{
   state = {
     userData: '',
+    value: 'going',
   }
+
+  handleChange = (event, value) => {
+    this.setState({ value });
+  };
 
   componentDidMount() {
     // since we're going to be inside a function, we cant just use this
@@ -58,16 +88,37 @@ class Calendar extends Component{
   }
 
   render() {
+
+    const { classes } = this.props;
+    const { value } = this.state;
+
     return(
-      <div>
+      <div className={classes.root}>
       <ButtonAppBar></ButtonAppBar>
       <ScribbleHeader></ScribbleHeader>
-      <h1>Calendar</h1>
-      <CalendarTable
+      <AppBar position="static">
+        <Tabs 
+          value={value} 
+          onChange={this.handleChange}
+          // inkBarStyle = {{background: 'white'}}
+          centered
+          fullWidth
+        >
+            <Tab value="going" label="Going" />
+            <Tab value="invite" label="Invite" />
+        </Tabs>
+      </AppBar>
+      {value === 'going' && <TabContainer><CalendarTable
         userData = {this.state.userData}
-      ></CalendarTable>
+      ></CalendarTable></TabContainer>}
+      {value === 'invite' && <TabContainer>Invite</TabContainer>}
       </div>
     );
   }
 }
-export default Calendar;
+
+Calendar.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(Calendar);
