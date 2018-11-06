@@ -8,51 +8,50 @@ db.settings({
   timestampsInSnapshots: true
 });
 
-// export function firebaseGetCalendar() {
-//     var user = firebase.auth().currentUser;
-
-//     return new Promise(function (resolve, reject) {
-
-//         if (user) {
-//             const uid = user.uid;
-//             const userPath = 'users/' + uid;
-
-//             const userRef = firebase.database().ref(userPath);
-//             const getOptions = { source: 'server' };
-
-//             userRef.get(getOptions).then(function(user) {
-//                 const userData = user.data();
-//                 let events = [];
-
-//                 // put every created event in events
-//                 userData.createdEvents.forEach(event => {
-//                     events.push(event);
-//                 });
-
-//                 // put every invited event in events
-//                 userData.invitedEvents.forEach(event => {
-//                     events.push(event);
-//                 });
-
-//                 let eventRequests = [];
-
-//                 events.forEach(eventID => {
-//                     eventRequests.push(db.collection("events").doc(eventID));
-//                 });
-
-//                 return Promise.all(eventRequests);
-//             }).then(function(events) {
-//                 // now we have all the data for each event
-//                 resolve(events);
-//             });
-//         } else {
-//             reject('no user');
-//         }
-
-//     });
-// }
-
 export function firebaseGetCalendar() {
+    return new Promise(function (resolve, reject) {
+        var user = firebase.auth().currentUser;
+        console.log("CURRENT USER: ", user);
+
+        if (user) {
+            const uid = user.uid;
+
+            const userRef = db.collection("users").doc(uid);
+            const getOptions = { source: 'server' };
+
+            userRef.get(getOptions).then(function(user) {
+                const userData = user.data();
+                let events = [];
+
+                // put every created event in events
+                userData.createdEvents.forEach(event => {
+                    events.push(event);
+                });
+
+                // put every invited event in events
+                userData.invitedEvents.forEach(event => {
+                    events.push(event);
+                });
+
+                let eventRequests = [];
+
+                events.forEach(eventID => {
+                    eventRequests.push(db.collection("events").doc(eventID).get());
+                });
+
+                return Promise.all(eventRequests);
+            }).then(function(events) {
+                // now we have all the data for each event
+                resolve(events);
+            });
+        } else {
+            reject('no user');
+        }
+
+    });
+}
+
+export function firebaseGetCalendarDummy() {
     var databaseRef = firebase.database().ref('events/someUniqueEventID');
   
     return new Promise(function (resolve, reject) {
@@ -77,7 +76,7 @@ export function firebaseSignIn(email, password) {
                 return false
               }
               // route to some page where we show the user their stuff
-              firebase.auth().onAuthStateChanged(function(user) {
+              let unsub = firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
                   // User is signed in.
                   window.location = 'Calendar'
@@ -86,6 +85,7 @@ export function firebaseSignIn(email, password) {
                   console.log("something bad happened");
                 }
               });
+              unsub();
             }).catch(function(error) {
                 console.log("invalid sign in!")
                 // Handle Errors here.

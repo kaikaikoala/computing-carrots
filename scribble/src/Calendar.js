@@ -39,6 +39,7 @@ const styles = theme => ({
 
 class Calendar extends Component{
   state = {
+    events: [],
     userData: '',
     value: 'going',
   }
@@ -53,18 +54,35 @@ class Calendar extends Component{
     const component = this;
     let sharedDocID;
 
-    console.log("this is the thing: ", firebase.auth().currentUser);
+    //console.log("this is the thing: ", firebase.auth().currentUser);
+
+    // OK SO LIKE IF WE DO THIS DUMMY DATABASE REQUEST AND THEN TRY TO GET THE CURRENT USER
+    // IT WORKS FOR SOME REASON SO LET'S JUST DO THIS SHIT FOR NOW I GUESS
 
     // get our calender data
-    firebaseInterface.firebaseGetCalendar().then(function(data) {
+    firebaseInterface.firebaseGetCalendarDummy().then(function(data) {
 
       // console.log(events);
       component.setState({ userData: data });
 
-      return firebaseInterface.addEvent();
-
+      //return firebaseInterface.addEvent();
     })
-    
+    .then(function() {
+      return firebaseInterface.firebaseGetCalendar();
+      // return firebaseInterface.addEvent();
+    }).then(function(events) {
+      let eventArray = [];
+
+      events.forEach(element => {
+        if (element.data() != null) {
+          eventArray.push(element.data());
+        }
+      });
+
+      component.setState({ events: eventArray });
+    });
+
+    // this is how we'll add users, and add times, ill keep it here for reference
     // .then(function(docID) {
 
     //   sharedDocID = docID;
@@ -83,11 +101,11 @@ class Calendar extends Component{
 
     // })
     
-    .catch(function(error) {
+    // .catch(function(error) {
 
-      console.error("Error: ", error);
+    //   console.error("Error: ", error);
 
-    });
+    // });
 
 
 
@@ -98,6 +116,8 @@ class Calendar extends Component{
 
     const { classes } = this.props;
     const { value } = this.state;
+
+    console.log("events in state: ", this.state.events);
 
     return(
       <div className={classes.root}>

@@ -2,3 +2,4 @@
 .DS_Store
 firebase.js
 scribble/storage.rules
+*.cache
