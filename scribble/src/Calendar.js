@@ -10,6 +10,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
 
 function TabContainer(props) {
   return (
@@ -27,6 +29,11 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
+  },
+  button: {
+    margin: theme.spacing.unit,
+    right: 20,
+    position: 'fixed',
   },
 });
 
@@ -108,10 +115,18 @@ class Calendar extends Component{
             <Tab value="invite" label="Invite" />
         </Tabs>
       </AppBar>
-      {value === 'going' && <TabContainer><CalendarTable
+      {value === 'going' && <TabContainer>
+        <CalendarTable
         userData = {this.state.userData}
-      ></CalendarTable></TabContainer>}
-      {value === 'invite' && <TabContainer>Invite</TabContainer>}
+        >
+        </CalendarTable>
+        <Button variant="fab" color="primary" aria-label="Add" className={classes.button}>
+        <AddIcon />
+        </Button>
+        </TabContainer>}
+      {value === 'invite' && <TabContainer>
+        Invite
+        </TabContainer>}
       </div>
     );
   }
