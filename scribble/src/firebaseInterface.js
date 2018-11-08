@@ -43,6 +43,10 @@ export function firebaseGetCalendar() {
             }).then(function(events) {
                 // now we have all the data for each event
                 resolve(events);
+            }).catch(function(error) {
+
+                console.error("Error: ", error);
+          
             });
         } else {
             reject('no user');

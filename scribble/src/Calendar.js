@@ -80,6 +80,10 @@ class Calendar extends Component{
       });
 
       component.setState({ events: eventArray });
+    }).catch(function(error) {
+
+      console.error("Error: ", error);
+
     });
 
     // this is how we'll add users, and add times, ill keep it here for reference
@@ -100,12 +104,6 @@ class Calendar extends Component{
     //   console.log("database update complete");
 
     // })
-    
-    // .catch(function(error) {
-
-    //   console.error("Error: ", error);
-
-    // });
 
 
 
