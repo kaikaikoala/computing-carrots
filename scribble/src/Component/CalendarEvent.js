@@ -77,7 +77,10 @@ class CalendarEvent extends React.Component {
         </CardActions>
         <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <EventPolling/>
+            <EventPolling
+                addAttendee={()=>this.props.addAttendee()} 
+                removeAttendee={()=>this.props.removeAttendee()} 
+            />
           </CardContent>
         </Collapse>
       </Card>

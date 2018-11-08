@@ -79,8 +79,8 @@ class SimplePopover extends React.Component {
           }}
         >
             <List>
-          <ListItem button>Mark as Available</ListItem>
-          <ListItem button>Mark as Unavailable</ListItem>
+          <ListItem button onClick={()=>this.props.addAttendee()}>Mark as Available</ListItem>
+          <ListItem button onClick={()=>this.props.removeAttendee()}>Mark as Unavailable</ListItem>
             </List>
         </Popover>
             </Grid>
@@ -92,7 +92,10 @@ class SimplePopover extends React.Component {
 
 function GridTest(props){
     const listItems = numbers.map((number)=>
-        <SimplePopover number={number} />
+        <SimplePopover number={number} 
+                addAttendee={()=>props.addAttendee()}
+                removeAttendee={()=>props.removeAttendee()}
+        />
     );
     return(
         <div>
@@ -103,9 +106,13 @@ function GridTest(props){
 
 class EventPolling extends React.Component {
     render() {
+        const { classes } = this.props;
         return(
             <div>
-            <GridTest/>
+            <GridTest
+                addAttendee={()=>this.props.addAttendee()}
+                removeAttendee={()=>this.props.removeAttendee()}
+            />
             </div>
         );
     }

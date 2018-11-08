@@ -9,22 +9,16 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
   },
-  table: {
-    minWidth: 700,
-  },
 });
-
-let id = 0;
-function createData(date, place, time, avalible) {
-  id += 1;
-  return { id, date, place, time, avalible };
-}
 
 var dumArr=[1,2,3,4,5,6,7];
 
 function CalendarEvents(props){
     const someEvents = dumArr.map((dum)=>
-        <CalendarEvent></CalendarEvent>
+        <CalendarEvent
+            addAttendee={()=>props.addAttendee()}
+            removeAttendee={()=>props.removeAttendee()}
+        />
     );
     return(
         <div>{someEvents}</div>
@@ -43,19 +37,13 @@ function CalendarTable(props) {
   console.log(userData.options);
 
   // take our data and make it avalible to the TableCells
-  let rows = []
-  for (var i in userData.options) {
-    rows.push(createData(
-                          userData.options[i].date,
-                          userData.options[i].location,
-                          userData.options[i].time,
-                          userData.options[i].avalible
-                        ));
-  } 
-
 
     return(
-        <CalendarEvents/>
+        <CalendarEvents
+            events={props.events}
+            addAttendee={()=>props.addAttendee()}
+            removeAttendee={()=>props.removeAttendee()}
+        />
   );
 }
 

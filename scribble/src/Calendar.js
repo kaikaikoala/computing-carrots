@@ -44,6 +44,14 @@ class Calendar extends Component{
     value: 'going',
   }
 
+    addAttendee( ){
+        alert('add availability');
+    }
+
+    removeAttendee( ){
+        alert('remove availability');
+    }
+
   handleChange = (event, value) => {
     this.setState({ value });
   };
@@ -138,9 +146,10 @@ class Calendar extends Component{
       {value === 'going' && <TabContainer>
         <CalendarTable
         //userData = {this.state.userData}
-        //events = {this.state.events}
+        events = {this.state.events}
         userData = {"hello"}
-        events = {"hello"}
+        addAttendee={()=>this.addAttendee()}
+        removeAttendee={()=>this.removeAttendee()}
         >
         </CalendarTable>
         <CreateEvent>
