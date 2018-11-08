@@ -58,9 +58,21 @@ function getModalStyle() {
 }
 
 
+
 class CreateEvent extends React.Component {
   state = {
     open: false,
+    eventName: '',
+    description: '',
+    location: '',
+    startDate:"",
+    endDate:"",
+  };
+
+  handleChange = name => event => {
+    this.setState({
+      [name]: event.target.value,
+    });
   };
 
   handleOpen = () => {
@@ -78,7 +90,7 @@ class CreateEvent extends React.Component {
       
     return (
       <div>
-        <Button variant = "fab" color ="default" className={classes.button} onClick={this.handleOpen}>
+        <Button variant = "fab" color ="primary" className={classes.button} onClick={this.handleOpen}>
         <AddIcon />
         </Button>
         <Modal
@@ -91,21 +103,22 @@ class CreateEvent extends React.Component {
           <TextField id="event-name"
           label="Event Name"
           className={classes.inputField}
-          //onChange={this.handleChange('name')}
+          onChange={this.handleChange('eventName')}
           margin="normal"
           />
           <br />
           <TextField id="description"
           label="Description of Event"
           className={classes.inputField}
-          //onChange={this.handleChange('name')}
+          value={this.state.name}
+          onChange={this.handleChange('description')}
           margin="normal" 
           />
           <br />
           <TextField id="location"
           label="Location"
           className={classes.inputField}
-          //onChange={this.handleChange('name')}
+          onChange={this.handleChange('location')}
           margin="normal" 
           />
           <br />
