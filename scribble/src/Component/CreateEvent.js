@@ -99,7 +99,11 @@ class CreateEvent extends React.Component {
           open={this.state.open}
           onClose={this.handleClose}
         >
+        
         <div style={getModalStyle()} className={classes.paper}>
+        <Typography component="h1" variant="h5">
+              Create Your Event!
+            </Typography>
           <TextField id="event-name"
           label="Event Name"
           className={classes.inputField}
