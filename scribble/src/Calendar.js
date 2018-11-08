@@ -11,7 +11,6 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
 import CreateEvent from './Component/CreateEvent';
 
 function TabContainer(props) {
