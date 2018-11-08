@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import CalendarEvent from './CalendarEvent';
 
 const styles = theme => ({
   root: {
@@ -47,6 +48,7 @@ function CalendarTable(props) {
                         ));
   } 
 
+    /*
   return (
     <Paper className={classes.root}>
       <Typography component="h5" variant="h5" gutterBottom>
@@ -78,6 +80,9 @@ function CalendarTable(props) {
         </TableBody>
       </Table>
     </Paper>
+  */
+    return(
+        <CalendarEvent/>
   );
 }
 
