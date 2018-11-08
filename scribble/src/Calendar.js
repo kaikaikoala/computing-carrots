@@ -12,6 +12,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+import CreateEvent from './Component/CreateEvent';
 
 function TabContainer(props) {
   return (
@@ -137,12 +138,14 @@ class Calendar extends Component{
       </AppBar>
       {value === 'going' && <TabContainer>
         <CalendarTable
-        userData = {this.state.userData}
+        //userData = {this.state.userData}
+        //events = {this.state.events}
+        userData = {"hello"}
+        events = {"hello"}
         >
         </CalendarTable>
-        <Button variant="fab" color="primary" aria-label="Add" className={classes.button}>
-        <AddIcon />
-        </Button>
+        <CreateEvent>
+        </CreateEvent>
         </TabContainer>}
       {value === 'invite' && <TabContainer>
         Invite
