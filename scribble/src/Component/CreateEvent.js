@@ -64,6 +64,7 @@ class CreateEvent extends React.Component {
     eventName: '',
     description: '',
     location: '',
+    invites: '',
     startDate:"",
     endDate:"",
   };
@@ -122,6 +123,12 @@ class CreateEvent extends React.Component {
           label="Location"
           className={classes.inputField}
           onChange={this.handleChange('location')}
+          margin="normal" 
+          />
+          <TextField id="invites"
+          label="Invites"
+          className={classes.inputField}
+          onChange={this.handleChange('invites')}
           margin="normal" 
           />
           <br />
