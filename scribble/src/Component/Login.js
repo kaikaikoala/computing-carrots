@@ -23,6 +23,7 @@ const styles = theme => ({
       marginRight: 'auto',
     },
   },
+  
   paper: {
     marginTop: theme.spacing.unit * 8,
     display: 'flex',
