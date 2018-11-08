@@ -27,6 +27,18 @@ function createData(date, place, time, avalible) {
   return { id, date, place, time, avalible };
 }
 
+var dumArr=[1,2,3,4,5,6,7];
+
+function CalendarEvents(props){
+    const someEvents = dumArr.map((dum)=>
+        <CalendarEvent></CalendarEvent>
+    );
+    return(
+        <div>{someEvents}</div>
+    );
+}
+
+
 function CalendarTable(props) {
   const { classes } = props;
 
@@ -48,41 +60,9 @@ function CalendarTable(props) {
                         ));
   } 
 
-    /*
-  return (
-    <Paper className={classes.root}>
-      <Typography component="h5" variant="h5" gutterBottom>
-        Name: {userData.name}
-      </Typography>
-      <Typography component="h6" variant="h6" gutterBottom>
-        Description: {userData.description}
-      </Typography>
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell>Dates</TableCell>
-            <TableCell>Location</TableCell>
-            <TableCell>Time</TableCell>
-            <TableCell>Avalible?</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map(row => {
-            return (
-              <TableRow key={row.id}>
-                <TableCell string>{row.date}</TableCell>
-                <TableCell string>{row.place}</TableCell>
-                <TableCell string>{row.time}</TableCell>
-                <TableCell string>{row.avalible}</TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </Paper>
-  */
+
     return(
-        <CalendarEvent/>
+        <CalendarEvents/>
   );
 }
 

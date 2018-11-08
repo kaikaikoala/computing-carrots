@@ -34,6 +34,7 @@ const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
     right: 20,
+    bottom: 20,
     position: 'fixed',
   },
   paper: {
