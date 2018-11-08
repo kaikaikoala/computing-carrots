@@ -117,6 +117,9 @@ class Login extends React.Component {
                 onClick={() => {
                   // we route to the Calendar within firebaseRegister
                   firebaseInterface.firebaseSignIn(this.state.email, this.state.password)
+                    .then(function(){
+                      
+                    });
                 }}
               >
                 Sign in

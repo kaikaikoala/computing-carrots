@@ -28,7 +28,7 @@ export function firebaseGetCalendar() {
                     events.push(event);
                 });
 
-                // put every invited event in events
+                // // put every invited event in events
                 userData.invitedEvents.forEach(event => {
                     events.push(event);
                 });
@@ -39,13 +39,20 @@ export function firebaseGetCalendar() {
                     eventRequests.push(db.collection("events").doc(eventID).get());
                 });
 
+
                 return Promise.all(eventRequests);
             }).then(function(events) {
                 // now we have all the data for each event
-                resolve(events);
+                let eventData = []
+
+                events.forEach(element => {
+                    eventData.push(element.data());
+                });
+
+                resolve(eventData);
             }).catch(function(error) {
 
-                console.error("Error: ", error);
+                console.log("Error: ", error);
           
             });
         } else {
@@ -168,7 +175,7 @@ export function addTime(eventID, dateTime) {
             });
 
             const eventObject = {
-                date : new Date(dateTime),
+                date : dateTime,
                 avalibility : avalibilityArray,
             }
 
@@ -279,7 +286,7 @@ export function inviteUsers(eventID, userEmails) {
 
 // creates event and returns the id of the event
 // this should really return a future so we can handle 
-export function addEvent() {
+export function addEvent(eventName, description) {
     var user = firebase.auth().currentUser;
     console.log("running addevent");
 
@@ -288,6 +295,8 @@ export function addEvent() {
             const userID = user.uid;
         
             db.collection("events").add({
+                name: eventName,
+                desccription: description,
                 creator: userID,
                 invited: [userID],
                 dates: [],

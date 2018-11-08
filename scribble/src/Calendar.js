@@ -60,7 +60,6 @@ class Calendar extends Component{
     // since we're going to be inside a function, we cant just use this
     // so we first have to get a reference to it to use later
     const component = this;
-    let sharedDocID;
 
     //console.log("this is the thing: ", firebase.auth().currentUser);
 
@@ -71,59 +70,26 @@ class Calendar extends Component{
     firebaseInterface.firebaseGetCalendarDummy().then(function(data) {
 
       // console.log(events);
-      component.setState({ userData: data });
+      // component.setState({ userData: data });
 
       //return firebaseInterface.addEvent();
     })
     .then(function() {
       return firebaseInterface.firebaseGetCalendar();
-      // return firebaseInterface.addEvent();
     }).then(function(events) {
-      let eventArray = [];
-
-      events.forEach(element => {
-        if (element.data() != null) {
-          eventArray.push(element.data());
-        }
-      });
-
-      component.setState({ events: eventArray });
+      component.state.events = events;
+      console.log("events now in this.state.events", component.state.events);
     }).catch(function(error) {
 
       console.error("Error: ", error);
 
     });
-
-    // this is how we'll add users, and add times, ill keep it here for reference
-    // .then(function(docID) {
-
-    //   sharedDocID = docID;
-
-    //   const emailArray = ["example1@example.com", "example2@example.com", "example3@example.com"];
-
-    //   return firebaseInterface.inviteUsers(sharedDocID, emailArray);
-
-    // }).then(function(){
-
-    //   return firebaseInterface.addTime(sharedDocID, 'December 17, 1995 03:24:00');
-
-    // }).then(function(){
-
-    //   console.log("database update complete");
-
-    // })
-
-
-
-
   }
 
   render() {
 
     const { classes } = this.props;
     const { value } = this.state;
-
-    console.log("events in state: ", this.state.events);
 
     return(
       <div className={classes.root}>

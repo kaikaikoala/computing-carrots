@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
 import Modal from '@material-ui/core/Modal';
+import * as firebaseInterface from '../firebaseInterface.js';
 
 const styles = theme => ({
   panel: {
@@ -64,9 +65,9 @@ class CreateEvent extends React.Component {
     eventName: '',
     description: '',
     location: '',
-    invites: '',
-    startDate:"",
-    endDate:"",
+    invites: "",
+    startDate: "",
+    endDate: "",
   };
 
   handleChange = name => event => {
@@ -157,7 +158,56 @@ class CreateEvent extends React.Component {
         />
         </form>
         <br />
-          <Button variant="contained" label="Submit">
+          <Button 
+          variant="contained"
+          label="Submit"
+          onClick={() => {
+            // we cant use this.state inside so we make the variables here
+            let eventID = '';
+            let invites = this.state.invites;
+            let emails = invites.split(' ');
+            let startDate = this.state.startDate;
+            let endDate = this.state.endDate;
+
+            // all the logic to add events handles here
+            firebaseInterface.addEvent(this.state.eventName, this.state.description)
+            .then(function(eventDocID) {
+
+              eventID = eventDocID;
+
+              console.log("Split emails :", emails);
+                
+              return firebaseInterface.inviteUsers(eventID, emails);
+        
+            }).then(function(){
+
+              console.log("Start date:", startDate);
+              console.log("End data:", endDate);
+
+              const start = new Date(startDate);
+              const end = new Date(endDate);
+              const days = (end - start) / 1000 / 60 / 60 / 24;
+
+              let timesToAdd = [];
+              for (let i = 0; i <= days + 1; i++) { 
+                  const dateTime = new Date(start.getTime() + (i + 1) * 86400000);
+                  timesToAdd.push(firebaseInterface.addTime(eventID, dateTime));
+              }
+        
+              Promise.all(timesToAdd);
+            }).then(function(){
+
+              this.state.docID = '';
+              console.log("database update complete");
+        
+            })
+            .catch(function(error) {
+
+              console.error("Error: ", error);
+        
+            });
+          }}
+          >
             Submit
           </Button>
         </div>
