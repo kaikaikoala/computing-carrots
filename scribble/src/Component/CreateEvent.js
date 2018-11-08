@@ -128,6 +128,7 @@ class CreateEvent extends React.Component {
           label="Start"
           type="date"
           className={classes.textField}
+          onChange={this.handleChange("startDate")}
           InputLabelProps={{
             shrink: true,
           }}
@@ -139,6 +140,7 @@ class CreateEvent extends React.Component {
           label="End"
           type="date"
           className={classes.textField}
+          onChange={this.handleChange("endDate")}
           InputLabelProps={{
             shrink: true,
           }}
