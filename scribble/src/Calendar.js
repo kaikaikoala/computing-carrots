@@ -56,7 +56,7 @@ class Calendar extends Component{
     this.setState({ value });
   };
 
-  componentDidMount() {
+  componentWillMount() {
     // since we're going to be inside a function, we cant just use this
     // so we first have to get a reference to it to use later
     const component = this;
@@ -79,6 +79,7 @@ class Calendar extends Component{
     }).then(function(events) {
       component.state.events = events;
       console.log("events now in this.state.events", component.state.events);
+      component.forceUpdate();
     }).catch(function(error) {
 
       console.error("Error: ", error);
@@ -86,10 +87,20 @@ class Calendar extends Component{
     });
   }
 
+  // componentDidUpdate() {
+  //   this.state.events.forEach(element => {
+  //     console.log("this is one event: ", element);
+  //   });
+  // }
+
   render() {
 
     const { classes } = this.props;
     const { value } = this.state;
+    
+    // this.state.events.forEach(element => {
+    //   console.log("this is one event: ", element);
+    // });
 
     return(
       <div className={classes.root}>
