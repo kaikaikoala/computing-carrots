@@ -48,47 +48,67 @@ class CalendarEvent extends React.Component {
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
   };
+  
+            
 
   render() {
+      
     const { classes } = this.props;
+      var myInvites = this.props.userEvent.invited;
+        var myDate={attend:0,date:'TBD'} ;
+        for( var i=0 ; i<this.props.userEvent.dates.length;++i){
+            var attend = 0 ;
+            for( var j=0;j<this.props.userEvent.dates[i].avalibility.length;++j){
+                if( this.props.userEvent.dates[i].avalibility[j][myInvites[j]] == true ){
+                    attend+=1;
+                } 
+            }
+            if( myDate.attend < attend){
+                myDate.attend = attend;
+                myDate.date = this.props.userEvent.dates[i].date.toDate();
+            }
 
-    return (
-      <Card className={classes.card}>
-        <CardHeader
-          title="Name"
-          subheader="Date"
-        />
-        <CardContent>
-          <Typography component="p">
-        Description
-          </Typography>
-        </CardContent>
-        <CardActions className={classes.actions} disableActionSpacing>
-                   <IconButton
-            className={classnames(classes.expand, {
-              [classes.expandOpen]: this.state.expanded,
-            })}
-            onClick={this.handleExpandClick}
-            aria-expanded={this.state.expanded}
-            aria-label="Show more"
-          >
-            <ExpandMoreIcon />
-          </IconButton>
-        </CardActions>
-        <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
+        }
+      var mySubheader="Date: "+myDate.date
+          +" Attendance: "+myDate.attend;
+
+      return (
+          <Card className={classes.card}>
+          <CardHeader
+          title={this.props.userEvent.name}
+          subheader = {mySubheader}
+          />
           <CardContent>
-            <EventPolling
-                addAttendee={()=>this.props.addAttendee()} 
-                removeAttendee={()=>this.props.removeAttendee()} 
-            />
+          <Typography component="p">
+          {this.props.userEvent.desccription}
+          </Typography>
           </CardContent>
-        </Collapse>
-      </Card>
-    );
+          <CardActions className={classes.actions} disableActionSpacing>
+          <IconButton
+          className={classnames(classes.expand, {
+              [classes.expandOpen]: this.state.expanded,
+          })}
+          onClick={this.handleExpandClick}
+          aria-expanded={this.state.expanded}
+          aria-label="Show more"
+          >
+          <ExpandMoreIcon />
+          </IconButton>
+          </CardActions>
+          <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
+          <CardContent>
+          <EventPolling
+          addAttendee={()=>this.props.addAttendee()} 
+          removeAttendee={()=>this.props.removeAttendee()} 
+          />
+          </CardContent>
+          </Collapse>
+          </Card>
+      );
   }
 }
 
 CalendarEvent.propTypes = {
-  classes: PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired,
 };
 export default withStyles(styles)(CalendarEvent);

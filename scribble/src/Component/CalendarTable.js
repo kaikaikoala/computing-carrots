@@ -14,10 +14,12 @@ const styles = theme => ({
 var dumArr=[1,2,3,4,5,6,7];
 
 function CalendarEvents(props){
-    const someEvents = dumArr.map((dum)=>
+  const { classes } = props;
+    const someEvents = props.events.map((myEvent)=>
         <CalendarEvent
             addAttendee={()=>props.addAttendee()}
             removeAttendee={()=>props.removeAttendee()}
+            userEvent={myEvent}
         />
     );
     return(
