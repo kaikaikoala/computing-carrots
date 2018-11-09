@@ -14,6 +14,23 @@ const styles = theme => ({
 
 });
 
+function NameList(props){
+        var invited=[] ;
+        for( var i =0 ; i<props.date.avalibility.length; ++i){
+            invited[i]= Object.keys(props.date.avalibility[i]) ;
+        }
+    const names = invited.map((name)=>
+        <Typography>
+            {name}
+        </Typography>
+    );
+    return(
+        <div>
+        {names}
+        </div>
+    );
+}
+
 class SimplePopover extends React.Component {
 
     constructor(props){
@@ -60,7 +77,7 @@ class SimplePopover extends React.Component {
             <Grid item xs={4}><Typography variant="h6">{displayDate.getMonth()}/{displayDate.getDay()}</Typography></Grid>
             <Grid item xs={7}>
         <Typography variant="h6">{attend}</Typography>
-        <Hidden xsDown><Typography paragraph>{invited}</Typography></Hidden>
+        <Hidden xsDown><NameList date = {this.props.date}/></Hidden>
             </Grid>
             <Grid item xs={1}>
             <IconButton
