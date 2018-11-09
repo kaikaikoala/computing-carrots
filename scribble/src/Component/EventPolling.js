@@ -9,14 +9,10 @@ import Hidden from '@material-ui/core/Hidden';
 import Popover from '@material-ui/core/Popover';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+
 const styles = theme => ({
 
 });
-
-    var numbers=[['time1','people: 5','Kaishin, Juhsep, Kaori, Shark, you'],
-        ['time2','people: 3','Hello, julie, animals'],
-        ['time3','people: 7','kumi, stop, a, talkin, you, agree, Thank you']
-    ];
 
 class SimplePopover extends React.Component {
 
@@ -45,15 +41,26 @@ class SimplePopover extends React.Component {
 
     render(){
         const { classes } = this.props;
-    const { anchorEl } = this.state;
-    const open = Boolean(anchorEl);
+        const { anchorEl } = this.state;
+        const open = Boolean(anchorEl);
 
+        var attend = 0 ;
+        var invited=[] ;
+        for( var i =0 ; i<this.props.date.avalibility.length; ++i){
+            invited[i]= Object.keys(this.props.date.avalibility[i]) ;
+        }
+        for( var i=0;i<this.props.date.avalibility.length;i++){
+            if( this.props.date.avalibility[i][invited[i]] == true){
+                attend++;
+            }
+        }
+        var displayDate = this.props.date.date.toDate(); 
         return(
         <Grid container spacing = {0}>
-            <Grid item xs={4}><Typography variant="h6">{this.props.number[0]}</Typography></Grid>
+            <Grid item xs={4}><Typography variant="h6">{displayDate.getMonth()}/{displayDate.getDay()}</Typography></Grid>
             <Grid item xs={7}>
-        <Typography variant="h6">{this.props.number[1]}</Typography>
-        <Hidden xsDown><Typography paragraph>{this.props.number[2]}</Typography></Hidden>
+        <Typography variant="h6">{attend}</Typography>
+        <Hidden xsDown><Typography paragraph>{invited}</Typography></Hidden>
             </Grid>
             <Grid item xs={1}>
             <IconButton
@@ -91,8 +98,9 @@ class SimplePopover extends React.Component {
 }
 
 function GridTest(props){
-    const listItems = numbers.map((number)=>
-        <SimplePopover number={number} 
+    const listItems = props.dates.map((myDate)=>
+        <SimplePopover 
+                date={myDate} 
                 addAttendee={()=>props.addAttendee()}
                 removeAttendee={()=>props.removeAttendee()}
         />
@@ -105,13 +113,16 @@ function GridTest(props){
 }
 
 class EventPolling extends React.Component {
+    constructor(props){
+        super(props);
+    }
     render() {
-        const { classes } = this.props;
         return(
             <div>
             <GridTest
                 addAttendee={()=>this.props.addAttendee()}
                 removeAttendee={()=>this.props.removeAttendee()}
+                dates = {this.props.dates}
             />
             </div>
         );

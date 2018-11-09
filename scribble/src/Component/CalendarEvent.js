@@ -71,6 +71,7 @@ class CalendarEvent extends React.Component {
         }
       var mySubheader="Date: "+myDate.date
           +" Attendance: "+myDate.attend;
+      var iterator = this.props.userEvent.dates.keys();
 
       return (
           <Card className={classes.card}>
@@ -100,6 +101,7 @@ class CalendarEvent extends React.Component {
           <EventPolling
           addAttendee={()=>this.props.addAttendee()} 
           removeAttendee={()=>this.props.removeAttendee()} 
+          dates={this.props.userEvent.dates}
           />
           </CardContent>
           </Collapse>

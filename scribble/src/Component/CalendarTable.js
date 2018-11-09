@@ -11,8 +11,6 @@ const styles = theme => ({
   },
 });
 
-var dumArr=[1,2,3,4,5,6,7];
-
 function CalendarEvents(props){
   const { classes } = props;
     const someEvents = props.events.map((myEvent)=>
