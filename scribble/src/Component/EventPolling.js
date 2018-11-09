@@ -19,7 +19,13 @@ function NameList(props){
         for( var i =0 ; i<props.date.avalibility.length; ++i){
             invited[i]= Object.keys(props.date.avalibility[i]) ;
         }
-    const names = invited.map((name)=>
+    var attend=[]
+        for( var i=0;i<props.date.avalibility.length;i++){
+            if( props.date.avalibility[i][invited[i]] == true){
+                attend.push( invited[i] );
+            }
+        }
+    const names = attend.map((name)=>
         <Typography>
             {name}
         </Typography>
