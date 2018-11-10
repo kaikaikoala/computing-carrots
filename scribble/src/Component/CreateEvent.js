@@ -162,6 +162,9 @@ class CreateEvent extends React.Component {
           variant="contained"
           label="Submit"
           onClick={() => {
+            
+            this.setState({ open: false });
+  
             // we cant use this.state inside so we make the variables here
             let eventID = '';
             let invites = this.state.invites;
@@ -206,6 +209,7 @@ class CreateEvent extends React.Component {
               console.error("Error: ", error);
         
             });
+            
           }}
           >
             Submit
