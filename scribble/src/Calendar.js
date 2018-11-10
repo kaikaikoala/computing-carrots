@@ -15,7 +15,7 @@ import CreateEvent from './Component/CreateEvent';
 
 function TabContainer(props) {
   return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
+    <Typography component="div" style={{ padding: 8 * 8 }}>
       {props.children}
     </Typography>
   );
