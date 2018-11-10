@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ButtonAppBar from './Component/ButtonAppBar';
 import ScribbleHeader from './Component/ScribbleHeader';
+import CreateProfile from './Component/CreateProfile';
 
 class Profile extends Component{
   render(){
@@ -8,7 +9,7 @@ class Profile extends Component{
       <div>
       <ButtonAppBar></ButtonAppBar>
       <ScribbleHeader></ScribbleHeader>
-      <h1>Profile</h1>
+      <CreateProfile></CreateProfile>
       </div>
     );
   }
