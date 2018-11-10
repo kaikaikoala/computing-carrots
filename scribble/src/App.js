@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Home from './Home';
 import Calendar from './Calendar';
 import Contacts from './Contacts';
-import Add from './Add';
+import Profile from './Profile';
 import User from './fake-news/koala-kai-profile';
 
 import{
@@ -35,9 +35,9 @@ class App extends Component {
           }
         />
         <Route 
-          path="/Add"  
+          path="/Profile"  
           render={(props)=>
-            <Add onClick={()=> this.state.eventAdd() } /> 
+            <Profile /> 
           }
         />
       </div>
