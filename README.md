@@ -1,3 +1,0 @@
-# computing-carrots
-
-Hello, World!
