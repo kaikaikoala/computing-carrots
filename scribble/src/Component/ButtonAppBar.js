@@ -5,6 +5,13 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import CalendarToday from '@material-ui/icons/CalendarToday';
+import Settings from '@material-ui/icons/Settings';
+import Hidden from '@material-ui/core/Hidden';
+import withWidth from '@material-ui/core/withWidth';
+import compose from 'recompose/compose';
+
 
 import{
   Link,
@@ -53,7 +60,8 @@ function ButtonAppBar(props) {
                 className={classes.signIn}
                 onClick={() => {}}
           >
-                Contacts
+                <Hidden smUp><AccountCircle/></Hidden>
+                <Hidden xsDown>Contacts</Hidden>
           </Button>
           <Button
                 component={CalendarLink}
@@ -63,7 +71,8 @@ function ButtonAppBar(props) {
                 className={classes.signIn}
                 onClick={() => {}}
           >
-                Calendar
+                <Hidden xsDown>Calendar</Hidden>
+                <Hidden smUp><CalendarToday/></Hidden>
           </Button>
           <Button
                 component={ProfileLink}
@@ -73,7 +82,8 @@ function ButtonAppBar(props) {
                 className={classes.signIn}
                 onClick={() => {}}
           >
-               Profile 
+               <Hidden xsDown>Profile</Hidden> 
+               <Hidden smUp><Settings/></Hidden>
           </Button>
         </Toolbar>
       </AppBar>
@@ -83,6 +93,7 @@ function ButtonAppBar(props) {
 
 ButtonAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
+    width: PropTypes.string.isRequired
 };
 
-export default withStyles(styles)(ButtonAppBar);
+export default compose(withStyles(styles),withWidth())(ButtonAppBar);
