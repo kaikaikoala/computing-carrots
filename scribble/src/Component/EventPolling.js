@@ -79,9 +79,9 @@ class SimplePopover extends React.Component {
         }
         var displayDate = this.props.date.date.toDate(); 
         return(
-        <Grid container spacing = {0}>
-            <Grid item xs={4}><Typography variant="h6">{displayDate.toDateString()}</Typography></Grid>
-            <Grid item xs={7}>
+        <Grid container spacing = {8}>
+            <Grid item md ={4} xs={6}><Typography variant="h6">{displayDate.toDateString()}</Typography></Grid>
+            <Grid item md={7} xs={5}>
         <Typography variant="h6">{attend}</Typography>
         <Hidden xsDown><NameList date = {this.props.date}/></Hidden>
             </Grid>

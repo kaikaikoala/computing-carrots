@@ -23,7 +23,7 @@ const styles = {
   },
 };
 const CalendarLink= props =><Link to="/Calendar" {...props}/>
-const AddLink= props =><Link to="/Add" {...props}/>
+const ProfileLink= props =><Link to="/Profile" {...props}/>
 const ContactsLink= props =><Link to="/Contacts" {...props}/>
 const HomeLink= props =><Link to="/" {...props}/>
 
@@ -66,14 +66,14 @@ function ButtonAppBar(props) {
                 Calendar
           </Button>
           <Button
-                component={AddLink}
+                component={ProfileLink}
                 type="button"
                 variant="text"
                 color="inherit"
                 className={classes.signIn}
                 onClick={() => {}}
           >
-                Add
+               Profile 
           </Button>
         </Toolbar>
       </AppBar>

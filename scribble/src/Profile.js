@@ -1,16 +1,17 @@
 import React, {Component} from 'react';
 import ButtonAppBar from './Component/ButtonAppBar';
 import ScribbleHeader from './Component/ScribbleHeader';
+import CreateProfile from './Component/CreateProfile';
 
-class Add extends Component{
+class Profile extends Component{
   render(){
     return(
       <div>
       <ButtonAppBar></ButtonAppBar>
       <ScribbleHeader></ScribbleHeader>
-      <h1>Add</h1>
+      <CreateProfile></CreateProfile>
       </div>
     );
   }
 }
-export default Add;
+export default Profile;
