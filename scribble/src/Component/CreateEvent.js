@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import TextField from '@material-ui/core/TextField';
 import Modal from '@material-ui/core/Modal';
+import Location from './Location';
 import * as firebaseInterface from '../firebaseInterface.js';
 
 const styles = theme => ({
@@ -120,18 +121,16 @@ class CreateEvent extends React.Component {
           margin="normal" 
           />
           <br />
-          <TextField id="location"
-          label="Location"
-          className={classes.inputField}
-          onChange={this.handleChange('location')}
-          margin="normal" 
-          />
+          <br />
+          <Location>
+          </Location>
           <TextField id="invites"
           label="Invites"
           className={classes.inputField}
           onChange={this.handleChange('invites')}
           margin="normal" 
           />
+          <br />
           <br />
           <form>
           <TextField
@@ -215,6 +214,7 @@ class CreateEvent extends React.Component {
             Submit
           </Button>
         </div>
+
         </Modal>
       </div>
     );
