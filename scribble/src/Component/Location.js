@@ -23,14 +23,19 @@ const API_KEY = "AIzaSyCljSNy09WuXxS03xSxE10NrpHayfkfeSQ"
 Geocode.setApiKey("AIzaSyCljSNy09WuXxS03xSxE10NrpHayfkfeSQ");
 Geocode.enableDebug();
 
-const Map = compose(
+var Map = compose(
     withStateHandlers(() => ({
         isMarkerShown: false,
-        markerPosition: null
+        markerPosition: null,
+        lat: 33.953350,
+        lng: -117.396156,
       }), {
         onMapClick: ({ isMarkerShown }) => (e) => ({
             markerPosition: e.latLng,
+            lat: mainLat,
+            lng: mainLng,
             isMarkerShown:true,
+            center: e.latLng,
         })
       }),
     withScriptjs,
@@ -39,11 +44,12 @@ const Map = compose(
     (props =>
         <GoogleMap
             defaultZoom={12}
-            defaultCenter={{ lat: 33.953350, lng: -117.396156 }}
+            defaultCenter={{ lat: props.lat, lng: props.lng }}
             onClick={props.onMapClick}
+            
         >
-            {props.isMarkerShown && <Marker position={props.markerPosition}
-     onClick={() => console.log(props.markerPosition)}/>}
+            {props.isMarkerShown && <Marker position={{ lat: props.lat, lng: props.lng }}/> }
+     <GoogleMap center={{lat: props.lat, lng: props.lng }}/>
         </GoogleMap>
     )
 
@@ -104,7 +110,8 @@ const styles = theme => ({
   },
 });
 
-
+var mainLat = 33.953350;
+var mainLng = -117.396156;
 
 class Location extends React.Component {
   state = {
@@ -140,10 +147,22 @@ class Location extends React.Component {
   };
 
   handleSelectSuggest(suggest) {
-    console.log(suggest)
     this.setState({search: "", value: suggest.formatted_address})
-  
+    Geocode.fromAddress(suggest.formatted_address).then(
+  response => {
+    const { lat, lng } = response.results[0].geometry.location;
+    mainLat = lat;
+    mainLng = lng;
+  },
+  error => {
+    console.error(error);
+  }
+);
   };
+
+UNSAFE_componentWillReceiveProps() {
+    this.forceUpdate();
+}
 
   render() {
     const {search, value} = this.state
@@ -184,8 +203,11 @@ class Location extends React.Component {
                             loadingElement={<div style={{ height: `100%` }} />}
                             containerElement={<div style={{ height: `400px` }} />}
                             mapElement={<div style={{ height: `100%` }} />}
-                    
+                            lat ={mainLat}
+                            lng ={mainLng}
+                            
                         />
+                                
                     </div>
         
                   </Paper>
