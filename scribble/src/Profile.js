@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ButtonAppBar from './Component/ButtonAppBar';
 import ScribbleHeader from './Component/ScribbleHeader';
-import CreateProfile from './Component/CreateProfile';
+import DisplayProfile from './Component/DisplayProfile';
 import User from './fake-news/koala-kai-profile';
 
 class Profile extends Component{
@@ -20,7 +20,7 @@ class Profile extends Component{
       <div>
       <ButtonAppBar></ButtonAppBar>
       <ScribbleHeader></ScribbleHeader>
-      <CreateProfile
+      <DisplayProfile
         first = {this.state.first}
         last = {this.state.last}
         email = {this.state.email}
