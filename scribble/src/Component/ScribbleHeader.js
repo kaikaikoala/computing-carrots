@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
-const styles = {
+const styles = theme=> ( {
   root: {
     width: '100%',
+    padding: theme.spacing.unit*4,
   },
-};
+});
 
 function ScribbleHeader(props) {
   const { classes } = props;

@@ -143,6 +143,7 @@ class Location extends React.Component {
   };
   
   handleInputChange(e) {
+    console.log(e.latlng);
     this.setState({search: e.target.value, value: e.target.value})
   };
 

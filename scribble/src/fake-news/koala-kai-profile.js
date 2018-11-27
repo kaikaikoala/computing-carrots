@@ -1,6 +1,8 @@
 var User = {
-  "name":"Koala Kai",
-  "events":[
+  "first":"Koala",
+  "last":"Kai",
+  "email":"kai@koala.com",
+  "createdEvents":[
     {
       "name":"Skydive Meeting",
       "description":"To try and not fail this class",
@@ -32,7 +34,7 @@ var User = {
       ]
     }
   ],
-  "eventInvites":[
+  "invitedEvents":[
     {
       "name":"Meeting",
       "description":"To try and not fail this class",
@@ -54,7 +56,7 @@ var User = {
       ]
     }
   ],
-  "contactsList":[
+  "contacts":[
     {
       "group":"AI-Study" , 
       "contacts":["Jasmine Kwong","Moons Munoz","Joseph Park","Christian Palms"]

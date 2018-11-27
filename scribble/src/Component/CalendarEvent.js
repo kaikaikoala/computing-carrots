@@ -12,6 +12,41 @@ import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import EventPolling from './EventPolling';
+import Paper from '@material-ui/core/Paper';
+import Switch from '@material-ui/core/Switch';
+import { InfoWindow, withGoogleMap, withScriptjs, GoogleMap, Marker } from 'react-google-maps';
+import { compose, withStateHandlers } from "recompose";
+import Geocode from "react-geocode";
+const API_KEY = "AIzaSyCljSNy09WuXxS03xSxE10NrpHayfkfeSQ"
+Geocode.setApiKey("AIzaSyCljSNy09WuXxS03xSxE10NrpHayfkfeSQ");
+Geocode.enableDebug();
+
+var e={lat:33,lng:0,};
+var Map = compose(
+    withStateHandlers(() => ({
+      markerPosition: null,
+      lat: e.lat,
+      lng: e.lng,
+      isMarkerShown:true,
+    }), {
+        onMapClick: ({ isMarkerShown }) => () => ({
+        })
+      }),
+    withScriptjs,
+    withGoogleMap
+)
+    (props =>
+        <GoogleMap
+            defaultZoom={12}
+            defaultCenter={{ lat: props.lat, lng: props.lng }}
+            onClick={props.onMapClick}
+            
+        >
+            {props.isMarkerShown && <Marker position={{ lat: props.lat, lng: props.lng }}/> }
+     <GoogleMap center={{lat: props.lat, lng: props.lng }}/>
+        </GoogleMap>
+    )
+
 
 const styles = theme => ({
   card: {
@@ -80,6 +115,24 @@ class CalendarEvent extends React.Component {
           subheader = {mySubheader}
           />
           <CardContent>
+<Paper elevation={5} className={classes.paper}>
+        
+                    <div style={{ height: '100%' }}>
+                        <Map
+                            googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCljSNy09WuXxS03xSxE10NrpHayfkfeSQ"
+                            loadingElement={<div style={{ height: `100%` }} />}
+                            containerElement={<div style={{ height: `400px` }} />}
+                            mapElement={<div style={{ height: `100%` }} />}
+                            
+                            lat ={33}
+                            lng ={-117}
+                            
+                        />
+                                
+                    </div>
+        
+                  </Paper>
+
           <Typography component="p">
           {this.props.userEvent.desccription}
           </Typography>

@@ -9,6 +9,10 @@ import Modal from '@material-ui/core/Modal';
 import * as firebaseInterface from '../firebaseInterface.js';
 
 const styles = theme => ({
+  root:{
+    padding: theme.spacing.unit * 4,
+  },
+
   panel: {
     width: '90%',
   },
@@ -58,11 +62,14 @@ function getCenterStyles() {
   }
 
 class CreateProfile extends React.Component {
-  state = {
-    open: false,
-    firstName: '',
-    lastName: '',
-  };
+  constructor(props){
+    super(props);
+    this.state = {
+      open: false,
+      firstName: '',
+      lastName: '',
+    };
+  }
 
   handleChange = name => event => {
     this.setState({
@@ -74,13 +81,23 @@ class CreateProfile extends React.Component {
     const { classes } = this.props;
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
+    console.log(this.props.first);
       
     return (
         
-      <div style={getCenterStyles()} className={classes.paper}>
-        <Typography component="h1" variant="h4">
-              Profile Editor
+      <div  className={classes.root}>
+        <Typography component="h1" variant="h4" gutterBottom>
+              Profile 
             </Typography>
+        <Typography component="h4" variant="h6">
+          First Name: {this.props.first}
+        </Typography>
+        <Typography component="h4" variant="h6">
+          Last Name: {this.props.last}
+        </Typography>
+        <Typography component="h4" variant="h6">
+          Email: {this.props.email}
+        </Typography>
           <TextField id="first-name"
           label="First Name"
           className={classes.inputField}
