@@ -19,7 +19,7 @@ function ScribbleHeader(props) {
         Scribble
       </Typography>
       <Typography  variant="h5" align='center'gutterBottom>
-        Poll, Schedule, Connect
+        Paul, Schedule, Connect
       </Typography>
     </div>
   );
