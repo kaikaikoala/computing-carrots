@@ -10,6 +10,42 @@ import Popover from '@material-ui/core/Popover';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
+import Paper from '@material-ui/core/Paper';
+import Switch from '@material-ui/core/Switch';
+import { InfoWindow, withGoogleMap, withScriptjs, GoogleMap, Marker } from 'react-google-maps';
+import { compose, withStateHandlers } from "recompose";
+import Geocode from "react-geocode";
+const API_KEY = "AIzaSyCljSNy09WuXxS03xSxE10NrpHayfkfeSQ"
+Geocode.setApiKey("AIzaSyCljSNy09WuXxS03xSxE10NrpHayfkfeSQ");
+Geocode.enableDebug();
+
+var e={lat:33,lng:0,};
+var Map = compose(
+    withStateHandlers(() => ({
+      markerPosition: null,
+      lat: e.lat,
+      lng: e.lng,
+      isMarkerShown:true,
+    }), {
+        onMapClick: ({ isMarkerShown }) => () => ({
+        })
+      }),
+    withScriptjs,
+    withGoogleMap
+)
+    (props =>
+        <GoogleMap
+            defaultZoom={12}
+            defaultCenter={{ lat: props.lat, lng: props.lng }}
+            onClick={props.onMapClick}
+            
+        >
+            {props.isMarkerShown && <Marker position={{ lat: props.lat, lng: props.lng }}/> }
+     <GoogleMap center={{lat: props.lat, lng: props.lng }}/>
+        </GoogleMap>
+    )
+
+
 const styles = theme => ({
 
 });
@@ -140,8 +176,35 @@ class EventPolling extends React.Component {
         super(props);
     }
     render() {
+        const { classes } = this.props;
         return(
             <div>
+            <Typography variant="h4">
+              Location
+            </Typography>
+<Paper elevation={5} className={classes.paper}>
+        
+                    <div style={{ height: '100%' }}>
+                        <Map
+                            googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCljSNy09WuXxS03xSxE10NrpHayfkfeSQ"
+                            loadingElement={<div style={{ height: `100%` }} />}
+                            containerElement={<div style={{ height: `400px` }} />}
+                            mapElement={<div style={{ height: `100%` }} />}
+                            
+                            lat ={33}
+                            lng ={-117}
+                            
+                        />
+                                
+                    </div>
+        
+                  </Paper>
+
+          <br/>
+          <br/>
+            <Typography variant="h4" gutterbottom>
+              Attendance 
+            </Typography>
             <GridTest
                 addAttendee={()=>this.props.addAttendee()}
                 removeAttendee={()=>this.props.removeAttendee()}
