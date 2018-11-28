@@ -121,7 +121,6 @@ class CreateEvent extends React.Component {
           margin="normal" 
           />
           <br />
-          <br />
           <Location>
           </Location>
           <TextField id="invites"
@@ -130,8 +129,6 @@ class CreateEvent extends React.Component {
           onChange={this.handleChange('invites')}
           margin="normal" 
           />
-          <br />
-          <br />
           <form>
           <TextField
           id="date"
