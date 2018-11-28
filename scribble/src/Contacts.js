@@ -20,7 +20,12 @@ class Contacts extends Component{
       <div>
       <ButtonAppBar></ButtonAppBar>
       <ScribbleHeader></ScribbleHeader>
-      <Grid container spacing={2}>
+      <Grid
+        container
+        direction="row"
+        justify="flex-start"
+        alignItems="baseline"
+      >
         <Grid item xs={2}>
           <h1>Contacts</h1>  
         </Grid>
@@ -28,6 +33,7 @@ class Contacts extends Component{
           <AddContact></AddContact> 
         </Grid>
       </Grid>
+      <ContactCard></ContactCard>
       <br />
       <h1>Groups</h1>
       {/* <ContactCard addClick={()=>this.props.addClick()} contacts={this.props.contactsList[0]}/> */}

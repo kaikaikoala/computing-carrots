@@ -24,6 +24,7 @@ const styles = {
   },
 };
 
+
 function ContactCard(props) {
   const { classes } = props;
   const bull = <span className={classes.bullet}>•</span>;
@@ -32,14 +33,16 @@ function ContactCard(props) {
     <Card className={classes.card}>
       <CardContent>
         <Typography variant="h5" component="h2">
-          {props.contacts.group}
+        Contact Group
+        {/* {props.contacts.group} */}
         </Typography>
         <Typography className={classes.pos} color="textSecondary">
-          Group size: {props.contacts.contacts.length}
+          Group Size
+          {/* Group size: {props.contacts.contacts.length} */}
         </Typography>
-        <button onClick={props.addClick}>
-          Add Members
-        </button>
+        <Typography component="p">
+          Group Description 
+        </Typography>
       </CardContent>
       <CardActions>
         <Button size="small">Learn More</Button>
@@ -47,6 +50,7 @@ function ContactCard(props) {
     </Card>
   );
 }
+
 
 ContactCard.propTypes = {
   classes: PropTypes.object.isRequired,
