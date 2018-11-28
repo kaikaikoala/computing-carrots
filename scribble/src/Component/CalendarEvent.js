@@ -103,6 +103,8 @@ class CalendarEvent extends React.Component {
           addAttendee={()=>this.props.addAttendee()} 
           removeAttendee={()=>this.props.removeAttendee()} 
           dates={this.props.userEvent.dates}
+          eventID = {this.props.userEvent.eventID}
+          // send the location here
           />
           </CardContent>
           </Collapse>

@@ -4,15 +4,43 @@ import ScribbleHeader from './Component/ScribbleHeader';
 import DisplayProfile from './Component/DisplayProfile';
 import CreateProfile from './Component/CreateProfile';
 import User from './fake-news/koala-kai-profile';
+import * as firebaseInterface from './firebaseInterface.js';
 
 class Profile extends Component{
 
+  componentDidMount() {
+    let thisRef = this;
+    firebaseInterface.getProfileData().then(function(doc) {
+      if (doc.exists) {
+        const profile = doc.data();
+        const firstName = profile.first;
+        console.log(firstName);
+        const lastName = profile.last;
+        console.log(lastName);
+        const emailAddress = profile.email;
+        console.log(emailAddress);
+  
+        thisRef.setState({ 
+          first: firstName,
+          last: lastName,
+          email: emailAddress
+        });
+        
+        // this.forceUpdate();
+      }
+    })
+    .catch(function(error) {
+        console.log("Error getting profile:", error);
+    });
+  }
+
   constructor(props){
     super(props);
+
     this.state={ 
-      first: User.first,
-      last: User.last,
-      email: User.email,
+      first: "",
+      last: "",
+      email: "",
     };
   }
 
@@ -22,6 +50,8 @@ class Profile extends Component{
       last: last,
       email: email
     });
+
+    firebaseInterface.saveProfileData(first, last, email);
   }
 
   render(){

@@ -18,10 +18,10 @@ export function firebaseGetCalendar() {
 
             const userRef = db.collection("users").doc(uid);
             const getOptions = { source: 'server' };
+            let events = [];
 
             userRef.get(getOptions).then(function(user) {
                 const userData = user.data();
-                let events = [];
 
                 // put every created event in events
                 userData.createdEvents.forEach(event => {
@@ -41,13 +41,19 @@ export function firebaseGetCalendar() {
 
 
                 return Promise.all(eventRequests);
-            }).then(function(events) {
+            }).then(function(localEvents) {
                 // now we have all the data for each event
                 let eventData = []
 
-                events.forEach(element => {
+                localEvents.forEach(element => {
                     eventData.push(element.data());
                 });
+
+                for (let i = 0, len = eventData.length; i < len; i++) { 
+                    console.log("appending id: ", events[i]);
+                    eventData[i].eventID = events[i];
+                    console.log("event id is: ", eventData[i].eventID)
+                }
 
                 resolve(eventData);
             }).catch(function(error) {
@@ -321,4 +327,44 @@ export function addEvent(eventName, description) {
             reject(null);
         }
     });
+}
+
+export async function saveProfileData (firstName, lastName, emailAddress) {
+    var user = firebase.auth().currentUser;
+    console.log("running addevent");
+
+    if(user) {
+        const userID = user.uid;
+        const userRef = db.collection("users").doc(userID);
+        const waiting = await userRef.update({
+            first: firstName,
+            last: lastName,
+            email: emailAddress
+        })
+        console.log("update complete")
+
+    } else {
+        console.log("no user :(")
+    }
+}
+
+export function getProfileData() {
+    var user = firebase.auth().currentUser;
+    console.log("running addevent");
+
+    if (user) {
+        const userID = user.uid;
+        const userRef = db.collection("users").doc(userID);
+        return userRef.get();
+    } else {
+        console.log("no user signed in");
+        const dummyData = {
+            first: "",
+            last: "",
+            email: ""
+        }
+        return new Promise(function (resolve) {
+            resolve(dummyData);
+        });
+    }
 }

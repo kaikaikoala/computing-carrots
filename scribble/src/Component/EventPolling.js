@@ -103,6 +103,7 @@ class SimplePopover extends React.Component {
         const { anchorEl } = this.state;
         const open = Boolean(anchorEl);
 
+
         var attend = 0 ;
         var invited=[] ;
         for( var i =0 ; i<this.props.date.avalibility.length; ++i){
@@ -177,6 +178,11 @@ class EventPolling extends React.Component {
     }
     render() {
         const { classes } = this.props;
+
+        // NOW WE CAN ADD AND REMOVE ATTENDEES
+        console.log("eventID for this is: ", this.props.eventID);
+
+
         return(
             <div>
             <Typography variant="h4">
