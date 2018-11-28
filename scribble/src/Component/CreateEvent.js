@@ -112,7 +112,6 @@ class CreateEvent extends React.Component {
           onChange={this.handleChange('eventName')}
           margin="normal"
           />
-          <br />
           <TextField id="description"
           label="Description of Event"
           className={classes.inputField}
@@ -120,7 +119,6 @@ class CreateEvent extends React.Component {
           onChange={this.handleChange('description')}
           margin="normal" 
           />
-          <br />
           <Location>
           </Location>
           <TextField id="invites"
