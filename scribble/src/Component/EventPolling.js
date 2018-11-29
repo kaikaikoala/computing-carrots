@@ -163,8 +163,8 @@ class SimplePopover extends React.Component {
           }}
         >
             <List>
-          <ListItem button onClick={() => {this.addAttendee(eventIDRef, dateRef)}}>Mark as Available</ListItem>
-          <ListItem button onClick={() => {this.removeAttendee(eventIDRef, dateRef)}}>Mark as Unavailable</ListItem>
+          <ListItem button onClick={() => {this.props.addAttendee(eventIDRef, dateRef)}}>Mark as Available</ListItem>
+          <ListItem button onClick={() => {this.props.removeAttendee(eventIDRef, dateRef)}}>Mark as Unavailable</ListItem>
             </List>
         </Popover>
             </Grid>
@@ -180,8 +180,8 @@ function GridTest(props){
         <SimplePopover 
                 date={myDate} 
                 eventID = {props.eventID}
-                addAttendee={()=>props.addAttendee()}
-                removeAttendee={()=>props.removeAttendee()}
+                addAttendee={(eventID, date)=>props.addAttendee(eventID, date)}
+                removeAttendee={(eventID, date)=>props.removeAttendee(eventID, date)}
         />
     );
     return(
@@ -232,8 +232,8 @@ class EventPolling extends React.Component {
               Attendance 
             </Typography>
             <GridTest
-                addAttendee={()=>this.props.addAttendee()}
-                removeAttendee={()=>this.props.removeAttendee()}
+                addAttendee={(eventID, date)=>this.props.addAttendee(eventID, date)}
+                removeAttendee={(eventID, date)=>this.props.removeAttendee(eventID, date)}
                 dates = {this.props.dates}
                 eventID = {this.props.eventID}
             />

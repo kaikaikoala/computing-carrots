@@ -44,18 +44,6 @@ class Calendar extends Component{
     value: 'going',
   }
 
-    // These two functions are not actually used
-    addAttendee = function(eventID, date) {
-        // alert('add availability');
-        console.log("eventID for this: ", eventID)
-        console.log("date for this: ", date)
-    }
-
-    removeAttendee = function(eventID, date) {
-        // alert('remove availability');
-        console.log("eventID for this: ", eventID)
-        console.log("date for this: ", date)
-    }
 
   handleChange = (event, value) => {
     this.setState({ value });
@@ -97,6 +85,34 @@ class Calendar extends Component{
   //     console.log("this is one event: ", element);
   //   });
   // }
+    // These two functions are not actually used
+    addAttendee = function(eventID, date) {
+
+      firebaseInterface.setAttendeeState(eventID, date, true);
+      let self = this ;
+      self.state.events.find((i)=>{
+        return i.eventID == eventID
+      }).dates.find( (dateIter)=>{
+        return dateIter.date == date.date;
+      }).avalibility.find( (i)=>{
+        return i.hasOwnProperty( firebaseInterface.returnUserID() );
+      })[firebaseInterface.returnUserID()] = true ;
+
+      this.setState({
+        events: self.state.events ,
+      });
+    }
+
+    removeAttendee = function(eventID, date) {
+      alert('remove availability');
+      firebaseInterface.setAttendeeState(eventID, date, false);
+      let self = this ;
+      self.state.events.find((i)=>{return i.eventID == eventID}).dates.find( (dateIter)=>{return dateIter.date == date.date;}).avalibility.find( (i)=>{return i.hasOwnProperty( firebaseInterface.returnUserID() );})[firebaseInterface.returnUserID()] = false ;
+
+      this.setState({
+        events: self.state.events ,
+      });
+    }
 
   render() {
 
@@ -128,8 +144,8 @@ class Calendar extends Component{
         //userData = {this.state.userData}
         events = {this.state.events}
         userData = {"hello"}
-        addAttendee={()=>this.addAttendee()}
-        removeAttendee={()=>this.removeAttendee()}
+        addAttendee={(eventID, date)=>this.addAttendee(eventID, date)}
+        removeAttendee={(eventID, date)=>this.removeAttendee(eventID, date)}
         >
         </CalendarTable>
         <CreateEvent>

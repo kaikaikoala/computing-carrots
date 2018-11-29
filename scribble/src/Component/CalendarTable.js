@@ -15,8 +15,8 @@ function CalendarEvents(props){
   const { classes } = props;
     const someEvents = props.events.map((myEvent)=>
         <CalendarEvent
-            addAttendee={()=>props.addAttendee()}
-            removeAttendee={()=>props.removeAttendee()}
+            addAttendee={(eventID, date)=>props.addAttendee(eventID, date)}
+            removeAttendee={(eventID, date)=>props.removeAttendee(eventID, date)}
             userEvent={myEvent}
         />
     );
@@ -41,8 +41,8 @@ function CalendarTable(props) {
     return(
         <CalendarEvents
             events={props.events}
-            addAttendee={()=>props.addAttendee()}
-            removeAttendee={()=>props.removeAttendee()}
+            addAttendee={(eventID, date)=>props.addAttendee(eventID, date)}
+            removeAttendee={(eventID, date)=>props.removeAttendee(eventID, date)}
         />
   );
 }
