@@ -44,12 +44,17 @@ class Calendar extends Component{
     value: 'going',
   }
 
-    addAttendee( ){
-        alert('add availability');
+    // These two functions are not actually used
+    addAttendee = function(eventID, date) {
+        // alert('add availability');
+        console.log("eventID for this: ", eventID)
+        console.log("date for this: ", date)
     }
 
-    removeAttendee( ){
-        alert('remove availability');
+    removeAttendee = function(eventID, date) {
+        // alert('remove availability');
+        console.log("eventID for this: ", eventID)
+        console.log("date for this: ", date)
     }
 
   handleChange = (event, value) => {

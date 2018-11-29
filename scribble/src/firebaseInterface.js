@@ -368,3 +368,49 @@ export function getProfileData() {
         });
     }
 }
+
+// state should be a bool
+export async function setAttendeeState(eventID, date, state) {
+    const user = firebase.auth().currentUser;
+
+    if(user) {
+        const userID = user.uid;
+        const eventRef = db.collection("events").doc(eventID);
+        const event = await eventRef.get();
+        
+        if (event.exists) {
+            let eventData = event.data()
+            let dates = eventData.dates;
+
+            // go through each date
+            for (let i in dates) { 
+                // if we're at the correct date
+                if (dates[i].date.seconds === date.date.seconds) {
+                    // go through all the users
+                    for (let j in dates[i].avalibility) {
+                        // use keys to find the user id number
+                        let keys = Object.keys(dates[i].avalibility[j]);
+                        console.log("keys[0] is: ", keys[0]);
+                        console.log("userID is: ", userID);
+                        if (keys[0] === userID) {
+                            const userIDKey = keys[0];
+                            const objectRef = dates[i].avalibility[j];
+                            objectRef[userIDKey] = state;
+                            console.log("was there really an update")
+                        }
+                    }
+                }
+            }
+
+            eventData.dates = dates;
+            const saveData = await eventRef.update(eventData);
+            console.log("updated attendee state", saveData);
+
+        } else {
+            console.log("no event :(")
+        }
+
+    } else {
+        console.log("no user :(")
+    }
+}

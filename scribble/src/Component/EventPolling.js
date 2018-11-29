@@ -9,7 +9,7 @@ import Hidden from '@material-ui/core/Hidden';
 import Popover from '@material-ui/core/Popover';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-
+import * as firebaseInterface from '../firebaseInterface.js';
 import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
 import { InfoWindow, withGoogleMap, withScriptjs, GoogleMap, Marker } from 'react-google-maps';
@@ -98,11 +98,28 @@ class SimplePopover extends React.Component {
     });
   };
 
+    // HANDLE FIREBASE IN THESE 
+    addAttendee(eventID, date) {
+        // alert('add availability');
+        // console.log("eventID for this: ", eventID);
+        // console.log("date for this: ", date);
+        firebaseInterface.setAttendeeState(eventID, date, true)
+    }
+
+    removeAttendee(eventID, date) {
+        // alert('remove availability');
+        // console.log("eventID for this: ", eventID);
+        // console.log("date for this: ", date);
+        firebaseInterface.setAttendeeState(eventID, date, false)
+    }
+
     render(){
         const { classes } = this.props;
         const { anchorEl } = this.state;
         const open = Boolean(anchorEl);
 
+        const eventIDRef = this.props.eventID;
+        const dateRef = this.props.date;
 
         var attend = 0 ;
         var invited=[] ;
@@ -146,8 +163,8 @@ class SimplePopover extends React.Component {
           }}
         >
             <List>
-          <ListItem button onClick={()=>this.props.addAttendee()}>Mark as Available</ListItem>
-          <ListItem button onClick={()=>this.props.removeAttendee()}>Mark as Unavailable</ListItem>
+          <ListItem button onClick={() => {this.addAttendee(eventIDRef, dateRef)}}>Mark as Available</ListItem>
+          <ListItem button onClick={() => {this.removeAttendee(eventIDRef, dateRef)}}>Mark as Unavailable</ListItem>
             </List>
         </Popover>
             </Grid>
@@ -158,9 +175,11 @@ class SimplePopover extends React.Component {
 }
 
 function GridTest(props){
+
     const listItems = props.dates.map((myDate)=>
         <SimplePopover 
                 date={myDate} 
+                eventID = {props.eventID}
                 addAttendee={()=>props.addAttendee()}
                 removeAttendee={()=>props.removeAttendee()}
         />
@@ -176,6 +195,7 @@ class EventPolling extends React.Component {
     constructor(props){
         super(props);
     }
+    
     render() {
         const { classes } = this.props;
 
@@ -215,6 +235,7 @@ class EventPolling extends React.Component {
                 addAttendee={()=>this.props.addAttendee()}
                 removeAttendee={()=>this.props.removeAttendee()}
                 dates = {this.props.dates}
+                eventID = {this.props.eventID}
             />
             </div>
         );
