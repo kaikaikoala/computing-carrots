@@ -8,6 +8,16 @@ db.settings({
   timestampsInSnapshots: true
 });
 
+export function returnUserID() {
+    var user = firebase.auth().currentUser;
+
+    if(user) {
+        return user.uid;
+    } else {
+        return null;
+    }
+}
+
 export function firebaseGetCalendar() {
     return new Promise(function (resolve, reject) {
         var user = firebase.auth().currentUser;
@@ -292,9 +302,10 @@ export function inviteUsers(eventID, userEmails) {
 
 // creates event and returns the id of the event
 // this should really return a future so we can handle 
-export function addEvent(eventName, description) {
+export function addEvent(eventName, description, location) {
     var user = firebase.auth().currentUser;
     console.log("running addevent");
+    console.log("location from addEvent is: ", location);
 
     return new Promise(function (resolve, reject) {
         if (user) {
@@ -303,6 +314,9 @@ export function addEvent(eventName, description) {
             db.collection("events").add({
                 name: eventName,
                 desccription: description,
+                location: location.name,
+                lat: location.lat,
+                long: location.long,
                 creator: userID,
                 invited: [userID],
                 dates: [],
@@ -413,4 +427,21 @@ export async function setAttendeeState(eventID, date, state) {
     } else {
         console.log("no user :(")
     }
+}
+
+// this is a bad hack and i should feel bad
+let locationObject = null;
+export function setLocationObjectFromLocationJS(location) {
+    let newLocationObject = {
+        name: location.formatted_address,
+        lat: location.geometry.location.lat,
+        long: location.geometry.location.lng,
+    }
+    
+    locationObject = newLocationObject;
+    console.log("Hello from firebaseInterface.js. The location object is: ", locationObject);
+}
+
+export function getLocationObjectFromFirebaseInterfaceJS() {
+    return locationObject;
 }

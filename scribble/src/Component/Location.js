@@ -1,17 +1,17 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Modal from '@material-ui/core/Modal';
-import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
-import GoogleMapLoader from "react-google-maps-loader";
+// import Typography from '@material-ui/core/Typography';
+// import Modal from '@material-ui/core/Modal';
+// import Button from '@material-ui/core/Button';
+// import AddIcon from '@material-ui/icons/Add';
+// import GoogleMapLoader from "react-google-maps-loader";
 import TextField from '@material-ui/core/TextField';
-import GooglePlacesSuggest from "react-google-places-suggest";
+// import GooglePlacesSuggest from "react-google-places-suggest";
 import ReactGoogleMapLoader from "react-google-maps-loader"
 import ReactGooglePlacesSuggest from "react-google-places-suggest"
-import LocationOn from '@material-ui/icons/LocationOn';
-import GoogleMapReact from 'google-map-react';
+// import LocationOn from '@material-ui/icons/LocationOn';
+// import GoogleMapReact from 'google-map-react';
 import * as firebaseInterface from '../firebaseInterface.js';
 import { compose, withStateHandlers } from "recompose";
 import Collapse from '@material-ui/core/Collapse';
@@ -143,22 +143,22 @@ class Location extends React.Component {
   };
   
   handleInputChange(e) {
-    console.log(e.latlng);
     this.setState({search: e.target.value, value: e.target.value})
   };
 
   handleSelectSuggest(suggest) {
     this.setState({search: "", value: suggest.formatted_address})
     Geocode.fromAddress(suggest.formatted_address).then(
-  response => {
-    const { lat, lng } = response.results[0].geometry.location;
-    mainLat = lat;
-    mainLng = lng;
-  },
-  error => {
-    console.error(error);
-  }
-);
+      response => {
+        const { lat, lng } = response.results[0].geometry.location;
+        mainLat = lat;
+        mainLng = lng;
+        firebaseInterface.setLocationObjectFromLocationJS(response.results[0]);
+      },
+      error => {
+        console.error(error);
+        }
+    );
   };
 
 UNSAFE_componentWillReceiveProps() {

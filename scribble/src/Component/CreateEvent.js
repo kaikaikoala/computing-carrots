@@ -120,6 +120,7 @@ class CreateEvent extends React.Component {
           margin="normal" 
           />
           <Location>
+            // location props here?
           </Location>
           <TextField id="invites"
           label="Invites"
@@ -165,9 +166,12 @@ class CreateEvent extends React.Component {
             let emails = invites.split(' ');
             let startDate = this.state.startDate;
             let endDate = this.state.endDate;
+            let locationObject = firebaseInterface.getLocationObjectFromFirebaseInterfaceJS();
+
+            console.log("this is our location: ", this.state.location);
 
             // all the logic to add events handles here
-            firebaseInterface.addEvent(this.state.eventName, this.state.description)
+            firebaseInterface.addEvent(this.state.eventName, this.state.description, locationObject)
             .then(function(eventDocID) {
 
               eventID = eventDocID;
