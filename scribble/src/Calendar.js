@@ -104,7 +104,6 @@ class Calendar extends Component{
     }
 
     removeAttendee = function(eventID, date) {
-      alert('remove availability');
       firebaseInterface.setAttendeeState(eventID, date, false);
       let self = this ;
       self.state.events.find((i)=>{return i.eventID == eventID}).dates.find( (dateIter)=>{return dateIter.date == date.date;}).avalibility.find( (i)=>{return i.hasOwnProperty( firebaseInterface.returnUserID() );})[firebaseInterface.returnUserID()] = false ;
