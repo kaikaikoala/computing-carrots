@@ -30,8 +30,7 @@ const styles = theme => ({
       duration: theme.transitions.duration.shortest,
     }),
     marginLeft: 'auto',
-    [theme.breakpoints.up('sm')]: {
-      marginRight: -8,
+    [theme.breakpoints.up('sm')]: { marginRight: -8,
     },
   },
   expandOpen: {
@@ -104,6 +103,8 @@ class CalendarEvent extends React.Component {
           removeAttendee={(eventID, date)=>this.props.removeAttendee(eventID, date)} 
           dates={this.props.userEvent.dates}
           eventID = {this.props.userEvent.eventID}
+          lat= {this.props.userEvent.lat}
+          lng= {this.props.userEvent.long}
           // send the location here
           />
           </CardContent>

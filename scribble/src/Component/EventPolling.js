@@ -201,7 +201,8 @@ class EventPolling extends React.Component {
 
         // NOW WE CAN ADD AND REMOVE ATTENDEES
         console.log("eventID for this is: ", this.props.eventID);
-
+        e.lat = this.props.lat;
+        e.lng = this.props.lng;
 
         return(
             <div>
